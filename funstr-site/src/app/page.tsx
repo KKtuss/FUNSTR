@@ -41,6 +41,37 @@ function HowStep({
   );
 }
 
+function LinkRow({
+  label,
+  href,
+  external = false,
+}: {
+  label: string;
+  href: string;
+  external?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
+      className={[
+        "group relative flex items-center justify-between overflow-hidden",
+        "rounded-2xl bg-white/5 px-5 py-4 ring-1 ring-white/10",
+        "transition hover:-translate-y-[1px] hover:bg-white/8 hover:ring-white/20",
+      ].join(" ")}
+    >
+      <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-cyan-300/60 via-indigo-400/30 to-transparent opacity-70" />
+      <div className="min-w-0 pr-4 text-base font-semibold text-white/90">
+        <span className="truncate">{label}</span>
+      </div>
+      <div className="shrink-0 text-white/45 transition group-hover:text-white/75">
+        →
+      </div>
+    </Link>
+  );
+}
+
 export default function Home() {
   const actions = [
     token.links.buy && { label: "Buy $FUNSTR", href: token.links.buy },
@@ -129,28 +160,19 @@ export default function Home() {
           </div>
 
           <div className="lg:col-span-5">
-            <div className="rounded-3xl bg-white/5 p-7 ring-1 ring-white/10">
-              <div className="text-sm font-extrabold text-white">
+            <div className="rounded-3xl bg-white/5 p-8 ring-1 ring-white/10">
+              <div className="text-base font-extrabold text-white">
                 Project Links
               </div>
-              <div className="mt-4 grid gap-3">
+              <div className="mt-2 text-sm text-white/60">
+                Official destinations and resources.
+              </div>
+
+              <div className="mt-6 grid gap-3">
                 {actions.map((a) => (
-                  <Link
-                    key={a.label}
-                    href={a.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-2xl bg-white/5 px-4 py-3 text-sm font-semibold text-white/85 ring-1 ring-white/10 hover:bg-white/10"
-                  >
-                    {a.label}
-                  </Link>
+                  <LinkRow key={a.label} label={a.label} href={a.href} external />
                 ))}
-                <Link
-                  href="/domains"
-                  className="rounded-2xl bg-white/5 px-4 py-3 text-sm font-semibold text-white/85 ring-1 ring-white/10 hover:bg-white/10"
-                >
-                  GoDaddy Domains (live list)
-                </Link>
+                <LinkRow label="Domains (live list)" href="/domains" />
               </div>
             </div>
           </div>

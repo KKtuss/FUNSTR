@@ -25,7 +25,7 @@ function HowStep({
 }: {
   step: string;
   title: string;
-  body: string;
+  body: React.ReactNode;
 }) {
   return (
     <div className="rounded-3xl bg-white/5 p-8 ring-1 ring-white/10">
@@ -143,12 +143,23 @@ export default function Home() {
                 <HowStep
                   step="02"
                   title="Route to parked pages"
-                  body="Each domain points to our Vercel setup and shows the FUNSTRATEGY-owned landing page."
+                  body={
+                    <>
+                      Each domain points to our{" "}
+                      <Link
+                        href="/parked"
+                        className="font-semibold text-white/80 hover:text-white hover:underline"
+                      >
+                        parked page
+                      </Link>
+                      .
+                    </>
+                  }
                 />
                 <HowStep
                   step="03"
                   title="Grow the reserve"
-                  body="More domains, more visibility, more activity—fueling the ecosystem around FUNSTR."
+                  body="We curate and hold the strongest names, measure what performs, and reinvest into the next wave of domains."
                 />
                 <HowStep
                   step="04"

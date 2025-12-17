@@ -62,19 +62,8 @@ export function DomainsClient() {
 
   return (
     <div className="rounded-3xl bg-white/5 ring-1 ring-white/10">
-      <div className="border-b border-white/10 p-6">
-        <div className="text-sm font-extrabold text-white">Domains</div>
-        <div className="mt-1 text-sm text-white/60">
-          {loading
-            ? "Loading..."
-            : data && "error" in data
-              ? "Unable to load domains"
-              : `${rows.length.toLocaleString()} domains`}
-        </div>
-      </div>
-
-      <div className="border-b border-white/10 px-6 py-3 text-xs font-semibold tracking-wide text-white/50">
-        Domain
+      <div className="border-b border-white/10 p-6 text-sm font-extrabold text-white">
+        Domains
       </div>
 
       <div

@@ -109,18 +109,18 @@ export default function Home() {
                 />
                 <HowStep
                   step="02"
-                  title="Acquire .fun domains"
-                  body="FUNSTRATEGY accumulates a strategic reserve of .fun domains."
-                />
-                <HowStep
-                  step="03"
                   title="Route to parked pages"
                   body="Each domain points to our Vercel setup and shows the FUNSTRATEGY-owned landing page."
                 />
                 <HowStep
-                  step="04"
+                  step="03"
                   title="Grow the reserve"
                   body="More domains, more visibility, more activity—fueling the ecosystem around FUNSTR."
+                />
+                <HowStep
+                  step="04"
+                  title="Increase our exposure"
+                  body="Every new .fun domain expands reach and attention across the ecosystem."
                 />
               </div>
             </section>

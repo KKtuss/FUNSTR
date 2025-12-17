@@ -156,7 +156,8 @@ export default function Home() {
                       >
                         parked page
                       </Link>
-                      .
+                      {" "}
+                      and shows the FUNSTRATEGY-owned landing page.
                     </>
                   }
                 />

@@ -104,18 +104,18 @@ export default function Home() {
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <HowStep
                   step="01"
+                  title="Creator rewards"
+                  body="Strategic procurement of random .fun domain"
+                />
+                <HowStep
+                  step="02"
                   title="Acquire .fun domains"
                   body="FUNSTRATEGY accumulates a strategic reserve of .fun domains."
                 />
                 <HowStep
-                  step="02"
+                  step="03"
                   title="Route to parked pages"
                   body="Each domain points to our Vercel setup and shows the FUNSTRATEGY-owned landing page."
-                />
-                <HowStep
-                  step="03"
-                  title="Creator rewards"
-                  body="Creators receive rewards tied to activity and growth of the .fun reserve."
                 />
                 <HowStep
                   step="04"

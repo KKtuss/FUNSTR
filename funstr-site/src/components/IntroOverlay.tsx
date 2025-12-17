@@ -1,28 +1,18 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import { usePathname } from "next/navigation";
 
-function prefersReducedMotion() {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
-}
-
 export function IntroOverlay() {
   const pathname = usePathname();
-  const [mounted, setMounted] = React.useState(false);
-  const [visible, setVisible] = React.useState(false);
-  const [logoIn, setLogoIn] = React.useState(false);
+
+  // Start visible so blur + logo are present immediately on first paint.
+  const [visible, setVisible] = React.useState(true);
   const [buttonIn, setButtonIn] = React.useState(false);
   const [exiting, setExiting] = React.useState(false);
 
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
   // Show once per session, but never on /parked.
   React.useEffect(() => {
-    if (!mounted) return;
     if (pathname?.startsWith("/parked")) {
       setVisible(false);
       return;
@@ -37,34 +27,41 @@ export function IntroOverlay() {
 
     setVisible(true);
     setExiting(false);
-    setLogoIn(false);
     setButtonIn(false);
-
-    const reduce = prefersReducedMotion();
 
     // Lock scroll while visible.
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    const t1 = window.setTimeout(() => setLogoIn(true), reduce ? 0 : 120);
-    const t2 = window.setTimeout(() => setButtonIn(true), reduce ? 0 : 950);
+    const t = window.setTimeout(() => setButtonIn(true), 650);
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        onEnter();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
 
     return () => {
-      window.clearTimeout(t1);
-      window.clearTimeout(t2);
+      window.clearTimeout(t);
+      window.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = prevOverflow;
     };
-  }, [mounted, pathname]);
+  }, [pathname]);
 
   function onEnter() {
     const key = "funstr_intro_done";
     sessionStorage.setItem(key, "1");
+
+    // Trigger slide-up animation.
     setExiting(true);
+
     // Release scroll after the slide animation ends.
     window.setTimeout(() => {
       setVisible(false);
       document.body.style.overflow = "";
-    }, prefersReducedMotion() ? 0 : 750);
+    }, 750);
   }
 
   if (!visible) return null;
@@ -74,6 +71,7 @@ export function IntroOverlay() {
       className={[
         "fixed inset-0 z-[100] flex items-center justify-center",
         "bg-[#020313]/35 backdrop-blur-sm",
+        "transform-gpu will-change-transform",
         "transition-transform duration-700 ease-[cubic-bezier(0.2,0.9,0.2,1)]",
         exiting ? "-translate-y-full" : "translate-y-0",
       ].join(" ")}
@@ -85,18 +83,14 @@ export function IntroOverlay() {
           <img
             src="/logo.png"
             alt="FUNSTRATEGY"
-            className={[
-              "w-[900px] max-w-[92vw] object-contain",
-              "transition-all duration-700",
-              logoIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
-            ].join(" ")}
+            className="w-[900px] max-w-[92vw] object-contain"
           />
 
           <button
             type="button"
             onClick={onEnter}
             className={[
-              "mt-10 rounded-full px-8 py-4 text-base font-extrabold tracking-wide",
+              "mt-10 rounded-full px-10 py-5 text-lg font-extrabold tracking-wide",
               "bg-white text-black hover:bg-white/90",
               "transition-all duration-500",
               buttonIn
@@ -121,5 +115,3 @@ export function IntroOverlay() {
     </div>
   );
 }
-
-

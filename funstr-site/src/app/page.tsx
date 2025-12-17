@@ -104,7 +104,7 @@ export default function Home() {
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <HowStep
                   step="01"
-                  title="Creator rewards"
+                  title="Domain acquisition"
                   body="Automated procurement of random .fun domain funded by creator fees at a rate of two domains per minute"
                 />
                 <HowStep

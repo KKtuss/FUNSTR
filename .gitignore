@@ -1,5 +1,9 @@
 # Root ignore file for the monorepo-style layout.
 
+# Root deps/build
+node_modules/
+.next/
+
 # Stems contains raw/local assets; the deployed app uses funstr-site/public/*
 Stems/
 @Stems/
@@ -13,6 +17,9 @@ funstr-site/build/
 # Env files (never commit secrets)
 funstr-site/.env*
 funstr-site/env.local
+
+# Root lockfile is not required (Vercel uses npm install at root for detection)
+package-lock.json
 
 # Vercel local metadata
 .vercel/

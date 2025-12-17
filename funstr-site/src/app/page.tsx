@@ -7,11 +7,13 @@ import { token } from "@/lib/token";
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-      <div className="text-xs font-semibold tracking-wide text-white/50">
+    <div className="rounded-3xl bg-white/5 p-8 ring-1 ring-white/10">
+      <div className="text-sm font-semibold tracking-wide text-white/55">
         {label}
       </div>
-      <div className="mt-2 text-base font-bold text-white">{value}</div>
+      <div className="mt-3 text-2xl font-extrabold tracking-tight text-white">
+        {value}
+      </div>
     </div>
   );
 }
@@ -26,15 +28,15 @@ function HowStep({
   body: string;
 }) {
   return (
-    <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
+    <div className="rounded-3xl bg-white/5 p-8 ring-1 ring-white/10">
       <div className="flex items-center justify-between">
-        <div className="text-xs font-extrabold tracking-wide text-white/50">
+        <div className="text-sm font-extrabold tracking-wide text-white/55">
           {step}
         </div>
         <div className="h-2 w-2 rounded-full bg-cyan-300/70" />
       </div>
-      <div className="mt-3 text-base font-extrabold text-white">{title}</div>
-      <div className="mt-2 text-sm leading-6 text-white/70">{body}</div>
+      <div className="mt-3 text-lg font-extrabold text-white">{title}</div>
+      <div className="mt-3 text-base leading-7 text-white/70">{body}</div>
     </div>
   );
 }
@@ -60,48 +62,48 @@ export default function Home() {
       <main className="relative z-10 mx-auto w-full max-w-[1400px] px-4 py-14 sm:px-6 lg:px-10">
         <section className="grid gap-10 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
+            <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl">
               FUNSTRATEGY
               <span className="text-white/60"> ($FUNSTR)</span>
             </h1>
 
-            <p className="mt-5 max-w-2xl text-base leading-7 text-white/75 sm:text-lg">
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/75 sm:text-xl">
               {token.tagline}
             </p>
 
-            <div className="mt-4">
+            <div className="mt-5">
               <Link
                 href="/domains"
-                className="text-sm font-semibold text-white/80 hover:text-white hover:underline"
+                className="text-base font-semibold text-white/80 hover:text-white hover:underline"
               >
                 View .fun domains reserve →
               </Link>
             </div>
 
-            <div className="mt-10 grid gap-4 sm:grid-cols-2">
+            <div className="mt-12 grid gap-5 sm:grid-cols-2">
               <Stat label="Domains bought" value={token.domainsBought ?? "0"} />
               <Stat label="Total spent" value={token.totalSpent ?? "$0"} />
             </div>
 
-            <div className="mt-6">
+            <div className="mt-8">
               <CopyField label="Contract Address" value={token.contractAddress} />
             </div>
 
-            <div className="mt-6 text-xs leading-5 text-white/50">
+            <div className="mt-6 text-sm leading-6 text-white/45">
               Not financial advice. Always verify contract addresses and links
               from official sources.
             </div>
 
-            <section className="mt-12">
-              <div className="text-sm font-extrabold tracking-wide text-white">
+            <section className="mt-14">
+              <div className="text-base font-extrabold tracking-wide text-white">
                 How it works
               </div>
-              <div className="mt-2 max-w-2xl text-sm text-white/65">
+              <div className="mt-2 max-w-2xl text-base text-white/65">
                 A simple loop: acquire great .fun names, route them to the
                 project, and reward creators as the reserve grows.
               </div>
 
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="mt-7 grid gap-5 sm:grid-cols-2">
                 <HowStep
                   step="01"
                   title="Domain acquisition"

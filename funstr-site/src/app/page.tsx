@@ -16,6 +16,29 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
+function HowStep({
+  step,
+  title,
+  body,
+}: {
+  step: string;
+  title: string;
+  body: string;
+}) {
+  return (
+    <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
+      <div className="flex items-center justify-between">
+        <div className="text-xs font-extrabold tracking-wide text-white/50">
+          {step}
+        </div>
+        <div className="h-2 w-2 rounded-full bg-cyan-300/70" />
+      </div>
+      <div className="mt-3 text-base font-extrabold text-white">{title}</div>
+      <div className="mt-2 text-sm leading-6 text-white/70">{body}</div>
+    </div>
+  );
+}
+
 export default function Home() {
   const actions = [
     token.links.buy && { label: "Buy $FUNSTR", href: token.links.buy },
@@ -68,6 +91,39 @@ export default function Home() {
               Not financial advice. Always verify contract addresses and links
               from official sources.
             </div>
+
+            <section className="mt-12">
+              <div className="text-sm font-extrabold tracking-wide text-white">
+                How it works
+              </div>
+              <div className="mt-2 max-w-2xl text-sm text-white/65">
+                A simple loop: acquire great .fun names, route them to the
+                project, and reward creators as the reserve grows.
+              </div>
+
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <HowStep
+                  step="01"
+                  title="Acquire .fun domains"
+                  body="FUNSTRATEGY accumulates a strategic reserve of .fun domains."
+                />
+                <HowStep
+                  step="02"
+                  title="Route to parked pages"
+                  body="Each domain points to our Vercel setup and shows the FUNSTRATEGY-owned landing page."
+                />
+                <HowStep
+                  step="03"
+                  title="Creator rewards"
+                  body="Creators receive rewards tied to activity and growth of the .fun reserve."
+                />
+                <HowStep
+                  step="04"
+                  title="Grow the reserve"
+                  body="More domains, more visibility, more activity—fueling the ecosystem around FUNSTR."
+                />
+              </div>
+            </section>
           </div>
 
           <div className="lg:col-span-5">

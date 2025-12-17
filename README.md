@@ -25,4 +25,8 @@ Then restart `npm run dev`.
 
 This repo includes `vercel.json` so Vercel builds the Next.js app from `funstr-site/`.
 
+If Vercel asks for a Root Directory, set it to **`.`** (repo root). The root
+`package.json` exists only so Vercel can detect the Next.js version; actual build
+commands run inside `funstr-site/` via `vercel.json`.
+
 

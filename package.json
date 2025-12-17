@@ -1,0 +1,15 @@
+{
+  "name": "funstr",
+  "private": true,
+  "description": "Monorepo wrapper for FUNSTR site (Next.js app lives in funstr-site/).",
+  "dependencies": {
+    "next": "16.0.10"
+  },
+  "scripts": {
+    "dev": "npm --prefix funstr-site run dev",
+    "build": "npm --prefix funstr-site run build",
+    "lint": "npm --prefix funstr-site run lint"
+  }
+}
+
+

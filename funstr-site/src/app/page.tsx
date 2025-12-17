@@ -7,7 +7,7 @@ import { token } from "@/lib/token";
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 sm:p-8">
+    <div className="rounded-3xl bg-white/5 p-4 ring-1 ring-white/10 sm:p-8">
       <div className="text-xs font-semibold tracking-wide text-white/55 sm:text-sm">
         {label}
       </div>
@@ -28,7 +28,7 @@ function HowStep({
   body: React.ReactNode;
 }) {
   return (
-    <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 sm:p-8">
+    <div className="rounded-3xl bg-white/5 p-4 ring-1 ring-white/10 sm:p-8">
       <div className="flex items-center justify-between">
         <div className="text-xs font-extrabold tracking-wide text-white/55 sm:text-sm">
           {step}
@@ -95,14 +95,14 @@ export default function Home() {
       <SiteHeader />
 
       <main className="relative z-10 mx-auto w-full max-w-[1400px] px-4 py-10 sm:px-6 sm:py-14 lg:px-10">
-        <section className="grid gap-10 lg:grid-cols-12 lg:items-start">
+        <section className="grid gap-8 sm:gap-10 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
             <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
               FUNSTRATEGY
               <span className="text-white/60"> ($FUNSTR)</span>
             </h1>
 
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-white/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
+            <p className="mt-4 max-w-2xl text-[13px] leading-5 text-white/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
               {token.tagline}
             </p>
 
@@ -115,7 +115,7 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="mt-9 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5">
+            <div className="mt-8 grid gap-3 sm:mt-12 sm:grid-cols-2 sm:gap-5">
               <Stat label="Domains bought" value={token.domainsBought ?? "0"} />
               <Stat label="Total spent" value={token.totalSpent ?? "$0"} />
             </div>
@@ -129,7 +129,7 @@ export default function Home() {
               from official sources.
             </div>
 
-            <section className="mt-12 sm:mt-14">
+            <section className="mt-10 sm:mt-14">
               <div className="text-sm font-extrabold tracking-wide text-white sm:text-base">
                 How it works
               </div>
@@ -138,7 +138,7 @@ export default function Home() {
                 project, and reward creators as the reserve grows.
               </div>
 
-              <div className="mt-6 grid gap-4 sm:mt-7 sm:grid-cols-2 sm:gap-5">
+              <div className="mt-5 grid gap-3 sm:mt-7 sm:grid-cols-2 sm:gap-5">
                 <HowStep
                   step="01"
                   title="Domain acquisition"
@@ -176,7 +176,7 @@ export default function Home() {
           </div>
 
           <div className="lg:col-span-5">
-            <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 sm:p-8">
+            <div className="rounded-3xl bg-white/5 p-4 ring-1 ring-white/10 sm:p-8">
               <div className="text-sm font-extrabold text-white sm:text-base">
                 Project Links
               </div>
@@ -184,7 +184,7 @@ export default function Home() {
                 Official destinations and resources.
               </div>
 
-              <div className="mt-6 grid gap-3">
+              <div className="mt-5 grid gap-3 sm:mt-6">
                 {actions.map((a) => (
                   <LinkRow key={a.label} label={a.label} href={a.href} external />
                 ))}
@@ -194,7 +194,7 @@ export default function Home() {
           </div>
         </section>
 
-        <footer className="mt-16 border-t border-white/10 py-10 text-sm text-white/45">
+        <footer className="mt-12 border-t border-white/10 py-8 text-sm text-white/45 sm:mt-16 sm:py-10">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               © {new Date().getFullYear()} {token.name}. All rights reserved.

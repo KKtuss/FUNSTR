@@ -83,7 +83,7 @@ export function IntroOverlay() {
           <img
             src="/logo.png"
             alt="FUNSTRATEGY"
-            className="w-full max-w-[520px] object-contain sm:max-w-[900px]"
+            className="w-full max-w-[420px] object-contain sm:max-w-[900px]"
           />
 
           <button

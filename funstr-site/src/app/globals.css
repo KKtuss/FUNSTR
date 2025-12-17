@@ -32,6 +32,13 @@ body {
   overflow-x: hidden;
 }
 
+/* Portrait phones: slightly reduce overall scale so content fits without feeling oversized */
+@media (max-width: 420px) {
+  html {
+    font-size: 14px;
+  }
+}
+
 /* Slightly nicer defaults */
 ::selection {
   background: color-mix(in oklab, var(--foreground) 15%, transparent);

@@ -3,13 +3,7 @@
   "installCommand": "npm install --no-audit --no-fund && cd funstr-site && npm ci",
   "buildCommand": "cd funstr-site && npm run build",
   "devCommand": "cd funstr-site && npm run dev -- -p 3000",
-  "outputDirectory": "funstr-site/.next",
-  "crons": [
-    {
-      "path": "/api/cron/sync-domains",
-      "schedule": "*/15 * * * *"
-    }
-  ]
+  "outputDirectory": "funstr-site/.next"
 }
 
 

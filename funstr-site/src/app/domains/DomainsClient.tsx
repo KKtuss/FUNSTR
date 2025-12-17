@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
@@ -21,21 +21,12 @@ type ApiResponse =
       domains: DomainRow[];
       fetchedAt: string;
     }
-  | { error: string; status?: number; details?: unknown };
-
-type StatusResponse =
-  | {
-      ok: true;
-      baseUrl: string;
-      checkedDomain: string;
-      availability: unknown;
-    }
-  | { error: string; status?: number; details?: unknown; baseUrl?: string };
+  | { error: string; status?: number };
 
 function fmtDate(iso?: string) {
-  if (!iso) return "—";
+  if (!iso) return "â€”";
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "—";
+  if (Number.isNaN(d.getTime())) return "â€”";
   return new Intl.DateTimeFormat(undefined, {
     year: "numeric",
     month: "short",
@@ -49,9 +40,7 @@ function cn(...parts: Array<string | undefined | false>) {
 
 export function DomainsClient() {
   const [data, setData] = React.useState<ApiResponse | null>(null);
-  const [status, setStatus] = React.useState<StatusResponse | null>(null);
   const [loading, setLoading] = React.useState(true);
-  const [loadingStatus, setLoadingStatus] = React.useState(true);
   const [query, setQuery] = React.useState("");
   const [onlyAutoRenew, setOnlyAutoRenew] = React.useState(false);
   const [onlyPrivacy, setOnlyPrivacy] = React.useState(false);
@@ -61,9 +50,10 @@ export function DomainsClient() {
   async function load(refresh = false) {
     setLoading(true);
     try {
-      const res = await fetch(`/api/godaddy/domains${refresh ? "?refresh=1" : ""}`, {
-        cache: "no-store",
-      });
+      const res = await fetch(
+        `/api/godaddy/domains${refresh ? "?refresh=1" : ""}`,
+        { cache: "no-store" }
+      );
       const json = (await res.json()) as ApiResponse;
       setData(json);
     } catch {
@@ -73,24 +63,8 @@ export function DomainsClient() {
     }
   }
 
-  async function loadStatus() {
-    setLoadingStatus(true);
-    try {
-      const res = await fetch("/api/godaddy/status?domain=funstr.fun", {
-        cache: "no-store",
-      });
-      const json = (await res.json()) as StatusResponse;
-      setStatus(json);
-    } catch {
-      setStatus({ error: "Failed to check GoDaddy connection." });
-    } finally {
-      setLoadingStatus(false);
-    }
-  }
-
   React.useEffect(() => {
     void load(false);
-    void loadStatus();
   }, []);
 
   const rows = React.useMemo(() => {
@@ -112,35 +86,18 @@ export function DomainsClient() {
 
   return (
     <div className="rounded-3xl bg-white/5 ring-1 ring-white/10">
-      <div className="flex flex-col gap-4 border-b border-white/10 p-6 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-3 border-b border-white/10 p-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <div className="text-sm font-extrabold text-white">GoDaddy Domains</div>
+          <div className="text-sm font-extrabold text-white">Domains</div>
           <div className="mt-1 text-sm text-white/60">
             {loading
-              ? "Loading…"
+              ? "Loadingâ€¦"
               : data && "error" in data
-                ? data.error
+                ? "Unable to load domains"
                 : `${rows.length.toLocaleString()} domains`}
             {data && !("error" in data) && data.fetchedAt ? (
-              <span className="text-white/35">
-                {" "}
-                • fetched {fmtDate(data.fetchedAt)}
-              </span>
+              <span className="text-white/35"> â€¢ fetched {fmtDate(data.fetchedAt)}</span>
             ) : null}
-          </div>
-          <div className="mt-2 text-xs text-white/50">
-            {loadingStatus ? (
-              "Checking GoDaddy connection…"
-            ) : status && "ok" in status && status.ok ? (
-              <span>
-                Connection: <span className="text-white/75">OK</span> (availability
-                check)
-              </span>
-            ) : (
-              <span>
-                Connection: <span className="text-white/75">Not verified</span>
-              </span>
-            )}
           </div>
         </div>
 
@@ -148,17 +105,6 @@ export function DomainsClient() {
           <Button variant="secondary" onClick={() => void load(true)}>
             Refresh
           </Button>
-          <Button variant="secondary" onClick={() => void loadStatus()}>
-            Test connection
-          </Button>
-          <a
-            href="https://developer.godaddy.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full px-4 py-3 text-sm font-semibold text-white/70 hover:bg-white/10"
-          >
-            GoDaddy API docs
-          </a>
         </div>
       </div>
 
@@ -171,7 +117,7 @@ export function DomainsClient() {
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Type a domain (e.g. funstrategy.com)"
+              placeholder="Type a domain (e.g. funstrategy.fun)"
               className="mt-2 w-full rounded-2xl bg-black/30 px-4 py-3 text-sm text-white placeholder:text-white/30 ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-white/25"
             />
           </div>
@@ -185,6 +131,7 @@ export function DomainsClient() {
             />
             Auto-renew only
           </label>
+
           <label className="mt-1 inline-flex items-center gap-2 rounded-2xl bg-white/5 px-4 py-3 text-sm font-semibold text-white/75 ring-1 ring-white/10 hover:bg-white/10 sm:mt-6">
             <input
               type="checkbox"
@@ -194,11 +141,6 @@ export function DomainsClient() {
             />
             Privacy only
           </label>
-        </div>
-
-        <div className="text-xs text-white/45">
-          Tip: keep GoDaddy credentials server-side in{" "}
-          <span className="font-mono text-white/60">.env.local</span>.
         </div>
       </div>
 
@@ -217,39 +159,16 @@ export function DomainsClient() {
         aria-label="Domains list"
       >
         {loading ? (
-          <div className="p-6 text-sm text-white/60">Loading domains…</div>
+          <div className="p-6 text-sm text-white/60">Loadingâ€¦</div>
         ) : data && "error" in data ? (
           <div className="p-6 text-sm text-white/70">
-            <div className="font-semibold text-white">Couldn’t load domains.</div>
+            <div className="font-semibold text-white">Unable to load domains.</div>
             <div className="mt-2 text-white/60">
-              {data.error}
+              Please try again in a moment.
               {typeof data.status === "number" ? (
                 <span className="text-white/45"> (HTTP {data.status})</span>
               ) : null}
             </div>
-
-            <div className="mt-3 text-xs text-white/50">
-              If you haven’t set your credentials yet, create{" "}
-              <span className="font-mono">.env.local</span> from{" "}
-              <span className="font-mono">env.local.example</span>.
-            </div>
-
-            {data.status === 403 ? (
-              <div className="mt-3 text-xs text-white/50">
-                Note: GoDaddy can restrict the “list my domains” API for small
-                accounts (including 0 domains). Use “Test connection” above to
-                verify your key via a public availability endpoint.
-              </div>
-            ) : null}
-
-            {status && !("ok" in status) && !loadingStatus ? (
-              <div className="mt-3 text-xs text-white/50">
-                Connection check result: {status.error}
-                {typeof status.status === "number" ? (
-                  <span> (HTTP {status.status})</span>
-                ) : null}
-              </div>
-            ) : null}
           </div>
         ) : rows.length === 0 ? (
           <div className="p-6 text-sm text-white/60">No matches.</div>
@@ -260,11 +179,7 @@ export function DomainsClient() {
           >
             {rowVirtualizer.getVirtualItems().map((v) => {
               const d = rows[v.index];
-              const flags = [
-                d.locked ? "L" : "",
-                d.autoRenew ? "R" : "",
-                d.privacy ? "P" : "",
-              ]
+              const flags = [d.locked ? "L" : "", d.autoRenew ? "R" : "", d.privacy ? "P" : ""]
                 .filter(Boolean)
                 .join("");
 
@@ -280,18 +195,20 @@ export function DomainsClient() {
                     height: `${v.size}px`,
                   }}
                 >
-                  <div className="col-span-5 truncate font-semibold text-white/90">
-                    {d.domain || "—"}
-                  </div>
-                  <div className="col-span-2 text-white/70">{d.status ?? "—"}</div>
-                  <div className="col-span-2 text-white/70">
-                    {fmtDate(d.createdAt)}
-                  </div>
-                  <div className="col-span-2 text-white/70">
-                    {fmtDate(d.expires)}
-                  </div>
+                  <a
+                    className="col-span-5 truncate font-semibold text-white/90 hover:underline"
+                    href={`https://${d.domain}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={d.domain}
+                  >
+                    {d.domain || "â€”"}
+                  </a>
+                  <div className="col-span-2 text-white/70">{d.status ?? "â€”"}</div>
+                  <div className="col-span-2 text-white/70">{fmtDate(d.createdAt)}</div>
+                  <div className="col-span-2 text-white/70">{fmtDate(d.expires)}</div>
                   <div className="col-span-1 text-right font-mono text-[12px] text-white/55">
-                    {flags || "—"}
+                    {flags || "â€”"}
                   </div>
                 </div>
               );
@@ -301,12 +218,9 @@ export function DomainsClient() {
       </div>
 
       <div className="border-t border-white/10 p-6 text-xs text-white/45">
-        Flags: <span className="font-mono">L</span>=locked,{" "}
-        <span className="font-mono">R</span>=auto-renew,{" "}
-        <span className="font-mono">P</span>=privacy.
+        Flags: <span className="font-mono">L</span>=locked, <span className="font-mono">R</span>
+        =auto-renew, <span className="font-mono">P</span>=privacy.
       </div>
     </div>
   );
 }
-
-

@@ -17,8 +17,7 @@ export default function DomainsPage() {
             Domains owned by the project
           </div>
           <div className="text-sm text-white/65">
-            This list is fetched from GoDaddy via a server-side API route, so
-            your credentials stay private.{" "}
+            A live list of domains owned by the project.{" "}
             <Link href="/" className="font-semibold text-white/80 hover:underline">
               Back to token page
             </Link>

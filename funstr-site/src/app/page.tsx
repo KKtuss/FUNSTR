@@ -63,7 +63,7 @@ function LinkRow({
     >
       <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-cyan-300/60 via-indigo-400/30 to-transparent opacity-70" />
       <div className="min-w-0 pr-4 text-base font-semibold text-white/90">
-        <span className="truncate">{label}</span>
+        <span className="block truncate">{label}</span>
       </div>
       <div className="shrink-0 text-white/45 transition group-hover:text-white/75">
         →
@@ -85,7 +85,7 @@ export default function Home() {
   ].filter(Boolean) as Array<{ label: string; href: string }>;
 
   return (
-    <div className="min-h-screen bg-[#020313] text-white">
+    <div className="min-h-screen overflow-x-hidden bg-[#020313] text-white">
       <BackgroundVideo />
 
       <SiteHeader />

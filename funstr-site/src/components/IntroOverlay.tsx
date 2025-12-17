@@ -11,6 +11,20 @@ export function IntroOverlay() {
   const [buttonIn, setButtonIn] = React.useState(false);
   const [exiting, setExiting] = React.useState(false);
 
+  const onEnter = React.useCallback(() => {
+    const key = "funstr_intro_done";
+    sessionStorage.setItem(key, "1");
+
+    // Trigger slide-up animation.
+    setExiting(true);
+
+    // Release scroll after the slide animation ends.
+    window.setTimeout(() => {
+      setVisible(false);
+      document.body.style.overflow = "";
+    }, 750);
+  }, []);
+
   // Show once per session, but never on /parked.
   React.useEffect(() => {
     if (pathname?.startsWith("/parked")) {
@@ -48,21 +62,7 @@ export function IntroOverlay() {
       window.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = prevOverflow;
     };
-  }, [pathname]);
-
-  function onEnter() {
-    const key = "funstr_intro_done";
-    sessionStorage.setItem(key, "1");
-
-    // Trigger slide-up animation.
-    setExiting(true);
-
-    // Release scroll after the slide animation ends.
-    window.setTimeout(() => {
-      setVisible(false);
-      document.body.style.overflow = "";
-    }, 750);
-  }
+  }, [onEnter, pathname]);
 
   if (!visible) return null;
 

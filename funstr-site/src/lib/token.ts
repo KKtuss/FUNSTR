@@ -17,6 +17,8 @@ export type TokenConfig = {
   totalSupply: string;
   buyTax?: string;
   sellTax?: string;
+  domainsBought?: string;
+  totalSpent?: string;
   links: Partial<Record<TokenLinkKey, string>>;
 };
 
@@ -35,6 +37,8 @@ export const token: TokenConfig = {
   totalSupply: "1,000,000,000",
   buyTax: "0%",
   sellTax: "0%",
+  domainsBought: "0",
+  totalSpent: "$0",
   links: {
     buy: "https://example.com/buy",
     chart: "https://example.com/chart",

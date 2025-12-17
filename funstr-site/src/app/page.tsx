@@ -56,13 +56,8 @@ export default function Home() {
             </div>
 
             <div className="mt-10 grid gap-4 sm:grid-cols-2">
-              <Stat label="Chain" value={token.chain} />
-              <Stat label="Decimals" value={`${token.decimals}`} />
-              <Stat label="Total Supply" value={token.totalSupply} />
-              <Stat
-                label="Taxes (buy / sell)"
-                value={`${token.buyTax ?? "—"} / ${token.sellTax ?? "—"}`}
-              />
+              <Stat label="Domains bought" value={token.domainsBought ?? "0"} />
+              <Stat label="Total spent" value={token.totalSpent ?? "$0"} />
             </div>
 
             <div className="mt-6">

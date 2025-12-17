@@ -146,17 +146,17 @@ export function DomainsClient() {
         </div>
       </div>
 
-      <div className="grid grid-cols-12 gap-0 border-b border-white/10 px-6 py-4 text-sm font-semibold tracking-wide text-white/50">
-        <div className="col-span-5">Domain</div>
-        <div className="col-span-2">Status</div>
-        <div className="col-span-2">Created</div>
-        <div className="col-span-2">Expires</div>
-        <div className="col-span-1 text-right">Flags</div>
+      <div className="grid grid-cols-6 gap-0 border-b border-white/10 px-6 py-4 text-sm font-semibold tracking-wide text-white/50 sm:grid-cols-12">
+        <div className="col-span-5 sm:col-span-5">Domain</div>
+        <div className="hidden sm:col-span-2 sm:block">Status</div>
+        <div className="hidden sm:col-span-2 sm:block">Created</div>
+        <div className="hidden sm:col-span-2 sm:block">Expires</div>
+        <div className="col-span-1 text-right sm:col-span-1">Flags</div>
       </div>
 
       <div
         ref={parentRef}
-        className="relative h-[70vh] overflow-auto"
+        className="relative h-[60vh] overflow-auto sm:h-[70vh]"
         role="region"
         aria-label="Domains list"
       >
@@ -186,7 +186,7 @@ export function DomainsClient() {
                 <div
                   key={v.key}
                   className={cn(
-                    "absolute left-0 right-0 grid grid-cols-12 items-center gap-0 border-b border-white/5 px-6 text-base",
+                    "absolute left-0 right-0 grid grid-cols-6 items-center gap-0 border-b border-white/5 px-6 text-base sm:grid-cols-12",
                     v.index % 2 === 0 ? "bg-white/[0.02]" : "bg-transparent"
                   )}
                   style={{
@@ -195,7 +195,7 @@ export function DomainsClient() {
                   }}
                 >
                   <a
-                    className="col-span-5 truncate font-semibold text-white/90 hover:underline"
+                    className="col-span-5 truncate font-semibold text-white/90 hover:underline sm:col-span-5"
                     href={`https://${d.domain}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -203,10 +203,16 @@ export function DomainsClient() {
                   >
                     {d.domain || "—"}
                   </a>
-                  <div className="col-span-2 text-white/70">{d.status ?? "—"}</div>
-                  <div className="col-span-2 text-white/70">{fmtDate(d.createdAt)}</div>
-                  <div className="col-span-2 text-white/70">{fmtDate(d.expires)}</div>
-                  <div className="col-span-1 text-right font-mono text-[12px] text-white/55">
+                  <div className="hidden sm:col-span-2 sm:block text-white/70">
+                    {d.status ?? "—"}
+                  </div>
+                  <div className="hidden sm:col-span-2 sm:block text-white/70">
+                    {fmtDate(d.createdAt)}
+                  </div>
+                  <div className="hidden sm:col-span-2 sm:block text-white/70">
+                    {fmtDate(d.expires)}
+                  </div>
+                  <div className="col-span-1 text-right font-mono text-[12px] text-white/55 sm:col-span-1">
                     {flags || "—"}
                   </div>
                 </div>

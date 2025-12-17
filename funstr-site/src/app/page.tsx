@@ -7,11 +7,11 @@ import { token } from "@/lib/token";
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-3xl bg-white/5 p-8 ring-1 ring-white/10">
-      <div className="text-sm font-semibold tracking-wide text-white/55">
+    <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 sm:p-8">
+      <div className="text-xs font-semibold tracking-wide text-white/55 sm:text-sm">
         {label}
       </div>
-      <div className="mt-3 text-2xl font-extrabold tracking-tight text-white">
+      <div className="mt-3 text-xl font-extrabold tracking-tight text-white sm:text-2xl">
         {value}
       </div>
     </div>
@@ -28,15 +28,19 @@ function HowStep({
   body: React.ReactNode;
 }) {
   return (
-    <div className="rounded-3xl bg-white/5 p-8 ring-1 ring-white/10">
+    <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 sm:p-8">
       <div className="flex items-center justify-between">
-        <div className="text-sm font-extrabold tracking-wide text-white/55">
+        <div className="text-xs font-extrabold tracking-wide text-white/55 sm:text-sm">
           {step}
         </div>
         <div className="h-2 w-2 rounded-full bg-cyan-300/70" />
       </div>
-      <div className="mt-3 text-lg font-extrabold text-white">{title}</div>
-      <div className="mt-3 text-base leading-7 text-white/70">{body}</div>
+      <div className="mt-3 text-base font-extrabold text-white sm:text-lg">
+        {title}
+      </div>
+      <div className="mt-3 text-sm leading-6 text-white/70 sm:text-base sm:leading-7">
+        {body}
+      </div>
     </div>
   );
 }
@@ -57,12 +61,12 @@ function LinkRow({
       rel={external ? "noopener noreferrer" : undefined}
       className={[
         "group relative flex items-center justify-between overflow-hidden",
-        "rounded-2xl bg-white/5 px-5 py-4 ring-1 ring-white/10",
+        "rounded-2xl bg-white/5 px-4 py-3 ring-1 ring-white/10 sm:px-5 sm:py-4",
         "transition hover:-translate-y-[1px] hover:bg-white/8 hover:ring-white/20",
       ].join(" ")}
     >
       <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-cyan-300/60 via-indigo-400/30 to-transparent opacity-70" />
-      <div className="min-w-0 pr-4 text-base font-semibold text-white/90">
+      <div className="min-w-0 pr-4 text-sm font-semibold text-white/90 sm:text-base">
         <span className="block truncate">{label}</span>
       </div>
       <div className="shrink-0 text-white/45 transition group-hover:text-white/75">
@@ -90,33 +94,33 @@ export default function Home() {
 
       <SiteHeader />
 
-      <main className="relative z-10 mx-auto w-full max-w-[1400px] px-4 py-14 sm:px-6 lg:px-10">
+      <main className="relative z-10 mx-auto w-full max-w-[1400px] px-4 py-10 sm:px-6 sm:py-14 lg:px-10">
         <section className="grid gap-10 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
-            <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl">
+            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
               FUNSTRATEGY
               <span className="text-white/60"> ($FUNSTR)</span>
             </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/75 sm:text-xl">
+            <p className="mt-5 max-w-2xl text-base leading-7 text-white/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
               {token.tagline}
             </p>
 
-            <div className="mt-5">
+            <div className="mt-4 sm:mt-5">
               <Link
                 href="/domains"
-                className="text-base font-semibold text-white/80 hover:text-white hover:underline"
+                className="text-sm font-semibold text-white/80 hover:text-white hover:underline sm:text-base"
               >
                 View .fun domains reserve →
               </Link>
             </div>
 
-            <div className="mt-12 grid gap-5 sm:grid-cols-2">
+            <div className="mt-9 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5">
               <Stat label="Domains bought" value={token.domainsBought ?? "0"} />
               <Stat label="Total spent" value={token.totalSpent ?? "$0"} />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-7 sm:mt-8">
               <CopyField label="Contract Address" value={token.contractAddress} />
             </div>
 
@@ -125,16 +129,16 @@ export default function Home() {
               from official sources.
             </div>
 
-            <section className="mt-14">
-              <div className="text-base font-extrabold tracking-wide text-white">
+            <section className="mt-12 sm:mt-14">
+              <div className="text-sm font-extrabold tracking-wide text-white sm:text-base">
                 How it works
               </div>
-              <div className="mt-2 max-w-2xl text-base text-white/65">
+              <div className="mt-2 max-w-2xl text-sm text-white/65 sm:text-base">
                 A simple loop: acquire great .fun names, route them to the
                 project, and reward creators as the reserve grows.
               </div>
 
-              <div className="mt-7 grid gap-5 sm:grid-cols-2">
+              <div className="mt-6 grid gap-4 sm:mt-7 sm:grid-cols-2 sm:gap-5">
                 <HowStep
                   step="01"
                   title="Domain acquisition"
@@ -171,8 +175,8 @@ export default function Home() {
           </div>
 
           <div className="lg:col-span-5">
-            <div className="rounded-3xl bg-white/5 p-8 ring-1 ring-white/10">
-              <div className="text-base font-extrabold text-white">
+            <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 sm:p-8">
+              <div className="text-sm font-extrabold text-white sm:text-base">
                 Project Links
               </div>
               <div className="mt-2 text-sm text-white/60">

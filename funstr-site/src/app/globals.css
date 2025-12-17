@@ -26,6 +26,12 @@ body {
     Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
+/* Prevent horizontal scroll from off-screen decorative/absolute elements on mobile */
+html,
+body {
+  overflow-x: hidden;
+}
+
 /* Slightly nicer defaults */
 ::selection {
   background: color-mix(in oklab, var(--foreground) 15%, transparent);

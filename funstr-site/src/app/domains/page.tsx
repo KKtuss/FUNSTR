@@ -4,7 +4,7 @@ import { DomainsClient } from "@/app/domains/DomainsClient";
 
 export default function DomainsPage() {
   return (
-    <div className="min-h-screen bg-[#020313] text-white">
+    <div className="min-h-screen overflow-x-hidden bg-[#020313] text-white">
       <BackgroundVideo />
 
       <SiteHeader />

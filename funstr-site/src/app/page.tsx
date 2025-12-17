@@ -105,7 +105,7 @@ export default function Home() {
                 <HowStep
                   step="01"
                   title="Creator rewards"
-                  body="Strategic procurement of random .fun domain"
+                  body="Automated procurement of random .fun domain funded by creator fees at a rate of two domains per minute"
                 />
                 <HowStep
                   step="02"

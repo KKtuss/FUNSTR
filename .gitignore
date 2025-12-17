@@ -1,0 +1,21 @@
+# Root ignore file for the monorepo-style layout.
+
+# Stems contains raw/local assets; the deployed app uses funstr-site/public/*
+Stems/
+@Stems/
+
+# Next.js app build outputs/deps
+funstr-site/node_modules/
+funstr-site/.next/
+funstr-site/out/
+funstr-site/build/
+
+# Env files (never commit secrets)
+funstr-site/.env*
+funstr-site/env.local
+
+# Vercel local metadata
+.vercel/
+funstr-site/.vercel/
+
+

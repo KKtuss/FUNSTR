@@ -97,12 +97,12 @@ export default function Home() {
       <main className="relative z-10 mx-auto w-full max-w-[1400px] px-4 py-10 sm:px-6 sm:py-14 lg:px-10">
         <section className="grid gap-10 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+            <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
               FUNSTRATEGY
               <span className="text-white/60"> ($FUNSTR)</span>
             </h1>
 
-            <p className="mt-5 max-w-2xl text-base leading-7 text-white/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-white/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
               {token.tagline}
             </p>
 
@@ -124,7 +124,7 @@ export default function Home() {
               <CopyField label="Contract Address" value={token.contractAddress} />
             </div>
 
-            <div className="mt-6 text-sm leading-6 text-white/45">
+            <div className="mt-5 text-xs leading-5 text-white/45 sm:mt-6 sm:text-sm sm:leading-6">
               Not financial advice. Always verify contract addresses and links
               from official sources.
             </div>

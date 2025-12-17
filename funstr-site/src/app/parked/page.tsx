@@ -14,7 +14,7 @@ export default function ParkedPage() {
         <img
           src="/logo.png"
           alt="FUNSTRATEGY"
-          className="w-[420px] max-w-[90vw] object-contain"
+          className="w-full max-w-[320px] object-contain sm:max-w-[420px]"
         />
 
         <div className="mt-8 text-base font-semibold text-white/85">

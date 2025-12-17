@@ -85,10 +85,10 @@ export function DomainsClient() {
 
   return (
     <div className="rounded-3xl bg-white/5 ring-1 ring-white/10">
-      <div className="flex flex-col gap-3 border-b border-white/10 p-6 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-3 border-b border-white/10 p-4 sm:p-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <div className="text-base font-extrabold text-white">Domains</div>
-          <div className="mt-1 text-base text-white/60">
+          <div className="text-sm font-extrabold text-white sm:text-base">Domains</div>
+          <div className="mt-1 text-sm text-white/60 sm:text-base">
             {loading
               ? "Loading…"
               : data && "error" in data
@@ -110,21 +110,21 @@ export function DomainsClient() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-white/10 p-6 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-3 border-b border-white/10 p-4 sm:gap-4 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center">
           <div className="w-full sm:max-w-md">
-            <div className="text-sm font-semibold tracking-wide text-white/50">
+            <div className="text-xs font-semibold tracking-wide text-white/50 sm:text-sm">
               Search
             </div>
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Type a domain (e.g. funstrategy.fun)"
-              className="mt-2 w-full rounded-2xl bg-black/30 px-5 py-4 text-base text-white placeholder:text-white/30 ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-white/25"
+              className="mt-2 w-full rounded-2xl bg-black/30 px-4 py-3 text-sm text-white placeholder:text-white/30 ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-white/25 sm:px-5 sm:py-4 sm:text-base"
             />
           </div>
 
-          <label className="mt-1 inline-flex items-center gap-2 rounded-2xl bg-white/5 px-5 py-4 text-base font-semibold text-white/75 ring-1 ring-white/10 hover:bg-white/10 sm:mt-7">
+          <label className="mt-1 inline-flex items-center gap-2 rounded-2xl bg-white/5 px-4 py-3 text-sm font-semibold text-white/75 ring-1 ring-white/10 hover:bg-white/10 sm:mt-7 sm:px-5 sm:py-4 sm:text-base">
             <input
               type="checkbox"
               checked={onlyAutoRenew}
@@ -134,7 +134,7 @@ export function DomainsClient() {
             Auto-renew only
           </label>
 
-          <label className="mt-1 inline-flex items-center gap-2 rounded-2xl bg-white/5 px-5 py-4 text-base font-semibold text-white/75 ring-1 ring-white/10 hover:bg-white/10 sm:mt-7">
+          <label className="mt-1 inline-flex items-center gap-2 rounded-2xl bg-white/5 px-4 py-3 text-sm font-semibold text-white/75 ring-1 ring-white/10 hover:bg-white/10 sm:mt-7 sm:px-5 sm:py-4 sm:text-base">
             <input
               type="checkbox"
               checked={onlyPrivacy}
@@ -146,7 +146,7 @@ export function DomainsClient() {
         </div>
       </div>
 
-      <div className="grid grid-cols-6 gap-0 border-b border-white/10 px-6 py-4 text-sm font-semibold tracking-wide text-white/50 sm:grid-cols-12">
+      <div className="grid grid-cols-6 gap-0 border-b border-white/10 px-4 py-3 text-xs font-semibold tracking-wide text-white/50 sm:px-6 sm:py-4 sm:text-sm sm:grid-cols-12">
         <div className="col-span-5 sm:col-span-5">Domain</div>
         <div className="hidden sm:col-span-2 sm:block">Status</div>
         <div className="hidden sm:col-span-2 sm:block">Created</div>
@@ -161,9 +161,11 @@ export function DomainsClient() {
         aria-label="Domains list"
       >
         {loading ? (
-          <div className="p-6 text-base text-white/60">Loading…</div>
+          <div className="p-4 text-sm text-white/60 sm:p-6 sm:text-base">
+            Loading…
+          </div>
         ) : data && "error" in data ? (
-          <div className="p-6 text-base text-white/70">
+          <div className="p-4 text-sm text-white/70 sm:p-6 sm:text-base">
             <div className="font-semibold text-white">Unable to load domains.</div>
             <div className="mt-2 text-white/60">
               Please try again later.
@@ -173,7 +175,9 @@ export function DomainsClient() {
             </div>
           </div>
         ) : rows.length === 0 ? (
-          <div className="p-6 text-base text-white/60">No matches.</div>
+          <div className="p-4 text-sm text-white/60 sm:p-6 sm:text-base">
+            No matches.
+          </div>
         ) : (
           <div style={{ height: `${rowVirtualizer.getTotalSize()}px` }} className="relative">
             {rowVirtualizer.getVirtualItems().map((v) => {
@@ -186,7 +190,7 @@ export function DomainsClient() {
                 <div
                   key={v.key}
                   className={cn(
-                    "absolute left-0 right-0 grid grid-cols-6 items-center gap-0 border-b border-white/5 px-6 text-base sm:grid-cols-12",
+                    "absolute left-0 right-0 grid grid-cols-6 items-center gap-0 border-b border-white/5 px-4 text-sm sm:px-6 sm:text-base sm:grid-cols-12",
                     v.index % 2 === 0 ? "bg-white/[0.02]" : "bg-transparent"
                   )}
                   style={{
@@ -222,7 +226,7 @@ export function DomainsClient() {
         )}
       </div>
 
-      <div className="border-t border-white/10 p-6 text-sm text-white/45">
+      <div className="border-t border-white/10 p-4 text-xs text-white/45 sm:p-6 sm:text-sm">
         Flags: <span className="font-mono">L</span>=locked, <span className="font-mono">R</span>
         =auto-renew, <span className="font-mono">P</span>=privacy.
       </div>

@@ -77,20 +77,20 @@ export function IntroOverlay() {
       ].join(" ")}
       aria-label="Intro"
     >
-      <div className="mx-auto w-full max-w-[1400px] px-6">
+      <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6">
         <div className="flex flex-col items-center text-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/logo.png"
             alt="FUNSTRATEGY"
-            className="w-[900px] max-w-[92vw] object-contain"
+            className="w-full max-w-[520px] object-contain sm:max-w-[900px]"
           />
 
           <button
             type="button"
             onClick={onEnter}
             className={[
-              "mt-10 rounded-full px-10 py-5 text-lg font-extrabold tracking-wide",
+              "mt-8 rounded-full px-7 py-4 text-base font-extrabold tracking-wide sm:mt-10 sm:px-10 sm:py-5 sm:text-lg",
               "bg-white text-black hover:bg-white/90",
               "transition-all duration-500",
               buttonIn

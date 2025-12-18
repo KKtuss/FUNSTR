@@ -402,6 +402,7 @@ export function CurationPipeline() {
   >([]);
   const [fetchedAt, setFetchedAt] = React.useState<string | undefined>();
   const skewRef = React.useRef(0);
+  const [hydrated, setHydrated] = React.useState(false);
   const [nowMs, setNowMs] = React.useState(() => Date.now());
 
   // Daily checkup cadence (display-only; the website shows the intended schedule).
@@ -451,6 +452,7 @@ export function CurationPipeline() {
   }, []);
 
   React.useEffect(() => {
+    setHydrated(true);
     const id = window.setInterval(
       () => setNowMs(Date.now() + skewRef.current),
       1000
@@ -475,6 +477,10 @@ export function CurationPipeline() {
     .length;
   const acquired7d = createdTimes.filter((t) => nowMs - t <= 7 * 24 * 60 * 60 * 1000)
     .length;
+  const acquiredPrev24h = createdTimes.filter((t) => {
+    const age = nowMs - t;
+    return age > 24 * 60 * 60 * 1000 && age <= 48 * 60 * 60 * 1000;
+  }).length;
 
   const avgLen = count
     ? Math.round((labels.reduce((a, s) => a + s.length, 0) / count) * 10) / 10
@@ -703,7 +709,6 @@ export function CurationPipeline() {
   const curStats = computePeriodStats(domains, curStartMs, curEndMs);
   const prevStats = computePeriodStats(domains, prevStartMs, prevEndMs);
 
-  const deltaAcq = curStats.count - prevStats.count;
   const deltaAvgLen = Math.round((curStats.avgLen - prevStats.avgLen) * 10) / 10;
   const deltaDigits = curStats.pDigits - prevStats.pDigits;
   const deltaHyphen = curStats.pHyphen - prevStats.pHyphen;
@@ -733,7 +738,9 @@ export function CurationPipeline() {
           <span
             title={`Next daily curation at ${String(CURATION_UTC_HOUR).padStart(2, "0")}:${String(CURATION_UTC_MINUTE).padStart(2, "0")} UTC`}
           >
-            {stageTitle} • next curation {fmtCountdown(nextIn)}
+            {hydrated
+              ? `${stageTitle} • next curation ${fmtCountdown(nextIn)}`
+              : "WAITING FOR NEXT CURATION • next curation --:--:--"}
           </span>
         </div>
       </div>
@@ -762,13 +769,9 @@ export function CurationPipeline() {
             </div>
             <div className="mt-3 space-y-2 text-sm">
               <div className="flex items-center justify-between gap-3">
-                <div className="text-white/70">Acquired</div>
+                <div className="text-white/70">Acquired (24h)</div>
                 <div className="font-extrabold text-white/85">
-                  {curStats.count}{" "}
-                  <span className={deltaAcq >= 0 ? "text-cyan-200" : "text-rose-200"}>
-                    ({deltaAcq >= 0 ? "+" : ""}
-                    {deltaAcq})
-                  </span>
+                  {acquired24h}
                 </div>
               </div>
 

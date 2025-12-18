@@ -20,25 +20,134 @@ function jsonError(status: number, message: string) {
 }
 
 function buildMockDomains(): GoDaddyDomain[] {
-  // Keep mock timestamps stable-ish so “Added X ago” doesn’t look like it changes every refresh.
-  // Anchor to “yesterday” and space entries by 1 hour.
+  // “Prop” reserve: realistic-ish .fun names + timestamps spread across days.
+  // Deterministic per UTC day so it feels random but doesn’t change every refresh.
   const now = Date.now();
-  const base = now - 24 * 60 * 60 * 1000;
-  return Array.from({ length: 10 }).map((_, i) => {
-    const createdAt = new Date(base - i * 60 * 60 * 1000).toISOString();
-    const expires = new Date(now + 1000 * 60 * 60 * 24 * 365).toISOString();
-    return {
-      domain: `funstr-${(1000 + i).toString().slice(-4)}.fun`,
+  const day = new Date(now).toISOString().slice(0, 10);
+
+  function hash32(input: string) {
+    let h = 2166136261;
+    for (let i = 0; i < input.length; i++) {
+      h ^= input.charCodeAt(i);
+      h = Math.imul(h, 16777619) >>> 0;
+    }
+    return h >>> 0;
+  }
+
+  function mulberry32(seed: number) {
+    let a = seed >>> 0;
+    return () => {
+      a |= 0;
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  const rand = mulberry32(hash32(`funstr:mock:${day}`));
+
+  const a = [
+    "meme",
+    "fun",
+    "vibe",
+    "lol",
+    "hype",
+    "party",
+    "arcade",
+    "pixel",
+    "toon",
+    "clip",
+    "beat",
+    "dance",
+    "spin",
+    "quiz",
+    "crew",
+    "club",
+    "chat",
+    "stream",
+    "creator",
+    "viral",
+    "random",
+    "luck",
+    "play",
+  ];
+  const b = [
+    "lab",
+    "labs",
+    "studio",
+    "vault",
+    "arena",
+    "zone",
+    "hub",
+    "room",
+    "loop",
+    "stash",
+    "mint",
+    "drop",
+    "show",
+    "wave",
+    "party",
+    "games",
+    "bot",
+  ];
+
+  function pick<T>(arr: T[]) {
+    return arr[Math.floor(rand() * arr.length)]!;
+  }
+
+  function makeLabel(i: number) {
+    const w1 = pick(a);
+    const w2 = pick(b);
+    const w3 = pick(a);
+
+    // 55% single word, 40% hyphenated two-word, 5% three-part.
+    let label =
+      rand() < 0.55 ? w1 : rand() < 0.95 ? `${w1}-${w2}` : `${w1}-${w2}-${w3}`;
+
+    // Rare numeric flair (kept low for realism).
+    if (rand() < 0.08) label = `${label}${String(10 + Math.floor(rand() * 90))}`;
+
+    // Ensure uniqueness if collisions happen.
+    if (i > 0 && rand() < 0.1) label = `${label}-${String(1 + Math.floor(rand() * 9))}`;
+
+    // Keep labels reasonable length.
+    return label.slice(0, 20);
+  }
+
+  const N = 24;
+  const newestAgeMs =
+    (2 * 60 * 60 * 1000) + Math.floor(rand() * 6 * 60 * 60 * 1000); // 2h..8h
+
+  const out: GoDaddyDomain[] = [];
+  for (let i = 0; i < N; i++) {
+    // Spread across ~7 days, newest not “seconds ago”.
+    const spacingMs =
+      (4 * 60 * 60 * 1000) + Math.floor(rand() * 6 * 60 * 60 * 1000); // 4h..10h
+    const jitterMs = Math.floor(rand() * 20 * 60 * 1000); // up to 20m
+    const createdAt = new Date(now - newestAgeMs - i * spacingMs - jitterMs).toISOString();
+    const expires = new Date(now + 1000 * 60 * 60 * 24 * (320 + Math.floor(rand() * 120))).toISOString();
+    out.push({
+      domain: `${makeLabel(i)}.fun`,
       status: "ACTIVE",
       createdAt,
       expires,
       renewalPeriod: 1,
-      privacy: i % 3 === 0,
-      autoRenew: i % 2 === 0,
+      privacy: rand() < 0.35,
+      autoRenew: rand() < 0.55,
       locked: true,
       nameServers: ["ns1.vercel-dns.com", "ns2.vercel-dns.com"],
-    };
+    });
+  }
+
+  // Sort newest first for nicer UIs
+  out.sort((x, y) => {
+    const tx = x.createdAt ? new Date(x.createdAt).getTime() : 0;
+    const ty = y.createdAt ? new Date(y.createdAt).getTime() : 0;
+    return ty - tx;
   });
+
+  return out;
 }
 
 async function readManualDomains(): Promise<GoDaddyDomain[] | null> {

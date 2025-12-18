@@ -7,6 +7,7 @@ import { LatestDomainsTerminal } from "@/components/LatestDomainsTerminal";
 import { CopyOnClickText } from "@/components/CopyOnClickText";
 import { Reveal } from "@/components/Reveal";
 import { CurationPipeline } from "@/components/CurationPipeline";
+import { DomainsBoughtValue } from "@/components/DomainsBoughtValue";
 import { token } from "@/lib/token";
 
 const displayFont = Space_Grotesk({
@@ -18,13 +19,21 @@ function normalizeAmount(value: string) {
   return value.replace(/^\s*[$€£]\s*/, "").trim();
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
-  const v = normalizeAmount(value);
+function Stat({
+  label,
+  value,
+  valueNode,
+}: {
+  label: string;
+  value?: string;
+  valueNode?: React.ReactNode;
+}) {
+  const v = normalizeAmount(value ?? "");
   return (
     <div className="rounded-3xl bg-black/35 p-4 ring-1 ring-white/10 transition-transform duration-300 hover:-translate-y-[2px] hover:ring-white/20 sm:p-8">
       <div className="flex flex-col items-center text-center">
         <div className="text-3xl font-black tracking-tight text-cyan-200 sm:text-4xl">
-          {v}
+          {valueNode ?? v}
         </div>
 
         <div className="mt-4 h-px w-full bg-white/10" />
@@ -124,7 +133,7 @@ export default function Home() {
                 <span className="text-white drop-shadow-[0_0_16px_rgba(255,255,255,0.22)] sm:drop-shadow-[0_0_20px_rgba(255,255,255,0.26)]">
                   WHY FUNSTRATEGY?
                 </span>
-              </h1>
+          </h1>
             </Reveal>
 
             <Reveal delayMs={120}>
@@ -160,7 +169,7 @@ export default function Home() {
 
             <Reveal delayMs={240}>
               <div className="mt-8 grid gap-3 sm:mt-12 sm:grid-cols-2 sm:gap-5">
-                <Stat label="Domains bought" value={token.domainsBought ?? "0"} />
+                <Stat label="Domains bought" valueNode={<DomainsBoughtValue />} />
                 <Stat label="Total spent" value={token.totalSpent ?? "0"} />
               </div>
             </Reveal>
@@ -171,7 +180,7 @@ export default function Home() {
             <Reveal delayMs={140}>
               <LatestDomainsTerminal />
             </Reveal>
-          </div>
+        </div>
         </section>
 
         {/* Desktop: keep CA centered under the whole top row */}

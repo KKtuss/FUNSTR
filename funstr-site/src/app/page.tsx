@@ -1,9 +1,15 @@
 import Link from "next/link";
+import { Space_Grotesk } from "next/font/google";
 
 import { BackgroundVideo } from "@/components/BackgroundVideo";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CopyField } from "@/components/ui/CopyField";
 import { token } from "@/lib/token";
+
+const displayFont = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+});
 
 function normalizeAmount(value: string) {
   return value.replace(/^\s*[$€£]\s*/, "").trim();
@@ -20,7 +26,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 
         <div className="mt-4 h-px w-full bg-white/10" />
 
-        <div className="mt-3 rounded-full bg-white/5 px-4 py-2 text-[11px] font-extrabold uppercase tracking-wider text-white/65 ring-1 ring-white/10 sm:text-xs">
+        <div className="mt-3 text-[11px] font-extrabold uppercase tracking-wider text-white/65 sm:text-xs">
           {label}
         </div>
       </div>
@@ -107,7 +113,9 @@ export default function Home() {
       <main className="relative z-10 mx-auto w-full max-w-[1400px] px-4 py-10 sm:px-6 sm:py-14 lg:px-10">
         <section className="grid gap-8 sm:gap-10 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
-            <h1 className="break-words text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+            <h1
+              className={`${displayFont.className} break-words text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl`}
+            >
               FUNSTRATEGY
               <span className="text-white/60"> ($FUNSTR)</span>
             </h1>

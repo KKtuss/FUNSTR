@@ -35,10 +35,10 @@ function HowStep({
         </div>
         <div className="h-2 w-2 rounded-full bg-cyan-300/70" />
       </div>
-      <div className="mt-3 text-base font-extrabold text-white sm:text-lg">
+      <div className="mt-3 break-words text-base font-extrabold text-white sm:text-lg">
         {title}
       </div>
-      <div className="mt-3 text-sm leading-6 text-white/70 sm:text-base sm:leading-7">
+      <div className="mt-3 break-words text-sm leading-6 text-white/70 sm:text-base sm:leading-7">
         {body}
       </div>
     </div>
@@ -97,7 +97,7 @@ export default function Home() {
       <main className="relative z-10 mx-auto w-full max-w-[1400px] px-4 py-10 sm:px-6 sm:py-14 lg:px-10">
         <section className="grid gap-8 sm:gap-10 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
-            <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+            <h1 className="break-words text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
               FUNSTRATEGY
               <span className="text-white/60"> ($FUNSTR)</span>
             </h1>

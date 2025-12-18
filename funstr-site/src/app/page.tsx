@@ -239,7 +239,7 @@ export default function Home() {
                 <HowStep
                   step="01"
                   title="Domain acquisition"
-                  body="Automated procurement of random .fun domain funded by creator fees at a rate of two domains per minute"
+                  body="Automated procurement of random .fun domain funded by creator fees at a rate of two domains per minute."
                 />
                 <HowStep
                   step="02"
@@ -260,7 +260,7 @@ export default function Home() {
                 <HowStep
                   step="03"
                   title="Grow the reserve"
-                  body="Our Domain Agent curates and holds the strongest names, tracks what performs, and reinvests into the next wave of winning domains"
+                  body="Our Domain Agent curates and holds the strongest names, tracks what performs, and reinvests into the next wave of winning domains."
                 />
                 <HowStep
                   step="04"

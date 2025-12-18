@@ -139,7 +139,17 @@ export default function Home() {
 
             <Reveal delayMs={120}>
               <p className="mx-auto mt-4 max-w-2xl text-[13px] leading-5 text-white/75 sm:mx-0 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
-                {token.tagline}
+                {token.tagline.split(". At FUNSTRATEGY,").length > 1 ? (
+                  <>
+                    {token.tagline.split(". At FUNSTRATEGY,")[0]}.
+                    <br />
+                    <span className="inline-block mt-2 sm:mt-0">
+                      At FUNSTRATEGY,{token.tagline.split(". At FUNSTRATEGY,")[1]}
+                    </span>
+                  </>
+                ) : (
+                  token.tagline
+                )}
               </p>
             </Reveal>
 

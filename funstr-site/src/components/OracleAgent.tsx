@@ -126,14 +126,96 @@ export function OracleAgent() {
     <div className="rounded-3xl bg-black/35 p-4 ring-1 ring-white/10 sm:p-8">
       <div className="flex flex-col items-center justify-between gap-2 sm:flex-row sm:items-center sm:gap-4">
         <div className="text-center text-sm font-extrabold text-white sm:text-left sm:text-base">
-          Oracle agent
+          Domain Agent
         </div>
         <div className="text-center text-xs text-white/45 sm:text-left">
-          {hydrated ? "Explanations are heuristic-driven (no wallet data, no promises)." : "Loading oracle…"}
+          {hydrated ? "" : "Loading…"}
         </div>
       </div>
 
       <div className="mt-4 grid gap-3 lg:grid-cols-3 lg:gap-4">
+        {/* Pipeline analysis */}
+        <div className="rounded-2xl bg-black/30 p-4 ring-1 ring-white/10 sm:p-5 lg:col-span-2">
+          <div className="flex flex-col items-center justify-between gap-2 sm:flex-row sm:items-center">
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-white/45">
+              Next acquisition outlook
+            </div>
+            <div className="text-xs text-white/40">{loadingPipeline ? "Refreshing…" : ""}</div>
+          </div>
+
+          {!pipelineResult ? (
+            <div className="mt-3 text-sm text-white/55">
+              {loadingPipeline ? "Analyzing reserve…" : "No oracle output yet."}
+            </div>
+          ) : (
+            <>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl bg-black/25 p-3 ring-1 ring-white/10">
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-white/45">
+                    Issues to watch
+                  </div>
+                  <div className="mt-2 space-y-2 text-sm text-white/70">
+                    {pipelineResult.issues.length ? (
+                      pipelineResult.issues.slice(0, 3).map((i) => (
+                        <div key={i.title} className="flex items-start gap-2">
+                          <div className={["mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full", severityDot(i.severity)].join(" ")} />
+                          <div className="min-w-0">
+                            <div className="font-semibold text-white/75">{i.title}</div>
+                            <div className="text-white/55">{i.detail}</div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-white/55">No major issues detected.</div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="rounded-xl bg-black/25 p-3 ring-1 ring-white/10">
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-white/45">
+                    Target criteria (next wave)
+                  </div>
+                  <div className="mt-2 space-y-2 text-sm text-white/70">
+                    {pipelineResult.targetCriteria.slice(0, 3).map((t) => (
+                      <div key={t} className="flex items-start gap-2">
+                        <div className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300/60" />
+                        <div>{t}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 rounded-xl bg-black/25 p-3 ring-1 ring-white/10">
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-white/45">
+                  Suggested .fun targets
+                </div>
+                <div className="mt-2 flex flex-wrap justify-center gap-2 sm:justify-start">
+                  {pipelineResult.suggestedDomains.slice(0, 6).map((d) => (
+                    <span
+                      key={d}
+                      className="rounded-full bg-white/8 px-3 py-1 text-xs font-semibold text-white/75 ring-1 ring-white/10"
+                    >
+                      {d}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {pipelineResult.recommendations.length ? (
+                <div className="mt-4 text-sm text-white/70">
+                  {pipelineResult.recommendations.slice(0, 3).map((r) => (
+                    <div key={r} className="flex items-start gap-2">
+                      <div className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-white/30" />
+                      <div>{r}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+            </>
+          )}
+        </div>
+
         {/* Explain */}
         <div className="rounded-2xl bg-black/30 p-4 ring-1 ring-white/10 sm:p-5">
           <div className="text-[11px] font-semibold uppercase tracking-wider text-white/45">
@@ -170,7 +252,7 @@ export function OracleAgent() {
           <div className="mt-3 rounded-xl bg-black/25 p-3 ring-1 ring-white/10">
             {!domainResult ? (
               <div className="text-sm text-white/55">
-                Pick a domain and the oracle will explain what signals it sees.
+                Pick a domain and we’ll explain the signals it shows.
               </div>
             ) : (
               <>
@@ -217,92 +299,6 @@ export function OracleAgent() {
               </>
             )}
           </div>
-        </div>
-
-        {/* Pipeline analysis */}
-        <div className="rounded-2xl bg-black/30 p-4 ring-1 ring-white/10 sm:p-5 lg:col-span-2">
-          <div className="flex flex-col items-center justify-between gap-2 sm:flex-row sm:items-center">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-white/45">
-              Next acquisition outlook
-            </div>
-            <div className="text-xs text-white/40">
-              {loadingPipeline ? "Refreshing…" : pipelineResult?.basedOn?.source ? `source: ${pipelineResult.basedOn.source}` : ""}
-            </div>
-          </div>
-
-          {!pipelineResult ? (
-            <div className="mt-3 text-sm text-white/55">
-              {loadingPipeline ? "Analyzing reserve…" : "No oracle output yet."}
-            </div>
-          ) : (
-            <>
-              <div className="mt-3 text-sm text-white/70">{pipelineResult.summary}</div>
-
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl bg-black/25 p-3 ring-1 ring-white/10">
-                  <div className="text-[11px] font-semibold uppercase tracking-wider text-white/45">
-                    Issues to watch
-                  </div>
-                  <div className="mt-2 space-y-2 text-sm text-white/70">
-                    {pipelineResult.issues.length ? (
-                      pipelineResult.issues.slice(0, 3).map((i) => (
-                        <div key={i.title} className="flex items-start gap-2">
-                          <div className={["mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full", severityDot(i.severity)].join(" ")} />
-                          <div className="min-w-0">
-                            <div className="font-semibold text-white/75">{i.title}</div>
-                            <div className="text-white/55">{i.detail}</div>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-white/55">No major issues detected.</div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="rounded-xl bg-black/25 p-3 ring-1 ring-white/10">
-                  <div className="text-[11px] font-semibold uppercase tracking-wider text-white/45">
-                    Target criteria (next wave)
-                  </div>
-                  <div className="mt-2 space-y-2 text-sm text-white/70">
-                    {pipelineResult.targetCriteria.slice(0, 3).map((t) => (
-                      <div key={t} className="flex items-start gap-2">
-                        <div className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300/60" />
-                        <div>{t}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4 rounded-xl bg-black/25 p-3 ring-1 ring-white/10">
-                <div className="text-[11px] font-semibold uppercase tracking-wider text-white/45">
-                  Suggested .fun targets (synthetic)
-                </div>
-                <div className="mt-2 flex flex-wrap justify-center gap-2 sm:justify-start">
-                  {pipelineResult.suggestedDomains.slice(0, 6).map((d) => (
-                    <span
-                      key={d}
-                      className="rounded-full bg-white/8 px-3 py-1 text-xs font-semibold text-white/75 ring-1 ring-white/10"
-                    >
-                      {d}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {pipelineResult.recommendations.length ? (
-                <div className="mt-4 text-sm text-white/70">
-                  {pipelineResult.recommendations.slice(0, 3).map((r) => (
-                    <div key={r} className="flex items-start gap-2">
-                      <div className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-white/30" />
-                      <div>{r}</div>
-                    </div>
-                  ))}
-                </div>
-              ) : null}
-            </>
-          )}
         </div>
       </div>
     </div>

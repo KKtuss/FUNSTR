@@ -123,7 +123,7 @@ export default function Home() {
 
       <SiteHeader />
 
-      <main className="relative z-10 mx-auto w-full max-w-[1240px] px-4 py-10 sm:px-6 sm:py-14 lg:max-w-[1400px] lg:px-10 2xl:max-w-[1560px]">
+      <main className="relative z-10 mx-auto w-full max-w-[1240px] px-4 pt-2 pb-10 sm:px-6 sm:py-14 lg:max-w-[1400px] lg:px-10 2xl:max-w-[1560px]">
         {/* Row 1: Hero (left) + Reserve overview (right) */}
         <section className="grid gap-8 sm:gap-10 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">

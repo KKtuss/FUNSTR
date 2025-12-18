@@ -8,7 +8,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-30 overflow-visible bg-black/35 ring-1 ring-white/10 backdrop-blur">
       {/* Full-width header; on desktop keep padding tiny so logo/nav sit near viewport edges */}
       <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-14 2xl:px-16">
-        <div className="relative flex h-20 items-center overflow-visible sm:h-24">
+        <div className="relative flex h-16 items-center overflow-visible sm:h-24">
           {/* Keep the logo huge, but let it float outside the shorter header bar */}
           <Link
             href="/"

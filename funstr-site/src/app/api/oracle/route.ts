@@ -114,9 +114,9 @@ function mulberry32(seed: number) {
 }
 
 const GLOBAL_FUN_HINTS = {
-  // These are “.fun-native” buckets used for explanations + recommendations.
+  // These are broad “market-aligned” buckets used for explanations + recommendations.
   // Keep them broad and brand-safe.
-  strongTokens: new Set([
+  keywordTokens: new Set([
     "meme",
     "creator",
     "clip",
@@ -137,6 +137,9 @@ const GLOBAL_FUN_HINTS = {
     "vibe",
     "toon",
     "games",
+  ]),
+  // Common naming suffixes on .fun (more “format” than “keyword”).
+  suffixTokens: new Set([
     "studio",
     "lab",
     "labs",
@@ -165,7 +168,7 @@ function scoreDomain(domain: string) {
   const lettersOnly = label.replace(/[^a-z]/g, "");
 
   // Heuristic scoring: 0..100.
-  // We bias toward short, clean, pronounceable, “.fun-native” tokens.
+  // We bias toward short, clean, pronounceable, market-aligned tokens.
   let score = 50;
 
   // Length preference: 4..8 sweet spot.
@@ -188,7 +191,9 @@ function scoreDomain(domain: string) {
   else if (vowelPct < 20 || vowelPct > 70) score -= 6;
 
   // Token alignment.
-  const strongHits = tokens.filter((t) => GLOBAL_FUN_HINTS.strongTokens.has(t));
+  const keywordHits = tokens.filter((t) => GLOBAL_FUN_HINTS.keywordTokens.has(t));
+  const suffixHits = tokens.filter((t) => GLOBAL_FUN_HINTS.suffixTokens.has(t));
+  const strongHits = [...new Set([...keywordHits, ...suffixHits])];
   if (strongHits.length > 0) score += Math.min(14, 6 + 4 * strongHits.length);
 
   score = clamp(Math.round(score), 0, 100);
@@ -208,8 +213,15 @@ function scoreDomain(domain: string) {
   if (vowelPct >= 30 && vowelPct <= 60) reasons.push(`Pronounceability looks decent (vowels ~${vowelPct}%)`);
   else cautions.push(`Pronounceability may be weaker (vowels ~${vowelPct}%)`);
 
-  if (strongHits.length) {
-    reasons.push(`Contains .fun-native keyword(s): ${strongHits.slice(0, 3).join(", ")}`);
+  if (keywordHits.length || suffixHits.length) {
+    // Prefer a “pattern” phrasing if we have both a keyword and a suffix (e.g., creator + zone).
+    if (keywordHits.length && suffixHits.length) {
+      reasons.push(`Market pattern: ${keywordHits[0]} + ${suffixHits[0]}`);
+    } else if (keywordHits.length) {
+      reasons.push(`Common .fun market keyword(s): ${keywordHits.slice(0, 3).join(", ")}`);
+    } else {
+      reasons.push(`Common .fun naming suffix: ${suffixHits.slice(0, 2).join(", ")}`);
+    }
   } else if (tokens.length) {
     reasons.push(`Readable token(s): ${tokens.slice(0, 3).join(", ")}`);
   }

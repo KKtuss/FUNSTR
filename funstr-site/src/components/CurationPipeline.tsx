@@ -432,13 +432,11 @@ export function CurationPipeline() {
         } else {
           setDomains([]);
           setFetchedAt(undefined);
-          setIsMock(false);
         }
       } catch {
         if (!cancelled) {
           setDomains([]);
           setFetchedAt(undefined);
-          setIsMock(false);
         }
       }
     }

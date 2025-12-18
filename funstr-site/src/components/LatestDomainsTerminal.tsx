@@ -88,8 +88,8 @@ export function LatestDomainsTerminal() {
 
   return (
     <div className="rounded-3xl bg-black/35 p-4 ring-1 ring-white/10 sm:p-8">
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-extrabold text-white sm:text-base">
+      <div className="flex flex-col items-center gap-1 sm:flex-row sm:items-center sm:justify-between">
+        <div className="text-center text-sm font-extrabold text-white sm:text-left sm:text-base">
           Latest bought domains
         </div>
         {fetchedAt ? (
@@ -129,7 +129,7 @@ export function LatestDomainsTerminal() {
         </div>
       </div>
 
-      <div className="mt-3 text-xs text-white/45">
+      <div className="mt-3 text-center text-xs text-white/45 sm:text-left">
         Source:{" "}
         <Link href="/domains" className="hover:text-white/70 hover:underline">
           /domains

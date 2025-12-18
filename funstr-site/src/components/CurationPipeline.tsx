@@ -713,8 +713,8 @@ export function CurationPipeline() {
 
   return (
     <div className="rounded-3xl bg-black/35 p-4 ring-1 ring-white/10 sm:p-8">
-      <div className="flex items-center justify-between gap-4">
-        <div className="text-sm font-extrabold text-white sm:text-base">
+      <div className="flex flex-col items-center justify-between gap-2 sm:flex-row sm:items-center sm:gap-4">
+        <div className="text-center text-sm font-extrabold text-white sm:text-left sm:text-base">
           Curation pipeline snapshot
         </div>
 

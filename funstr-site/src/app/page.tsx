@@ -57,12 +57,12 @@ function HowStep({
   body: React.ReactNode;
 }) {
   return (
-    <div className="rounded-3xl bg-black/35 p-4 ring-1 ring-white/10 transition-transform duration-300 hover:-translate-y-[2px] hover:ring-white/20 sm:p-8">
-      <div className="flex items-center justify-between">
+    <div className="rounded-3xl bg-black/35 p-4 text-center ring-1 ring-white/10 transition-transform duration-300 hover:-translate-y-[2px] hover:ring-white/20 sm:p-8 sm:text-left">
+      <div className="flex items-center justify-center sm:justify-between">
         <div className="text-xs font-extrabold tracking-wide text-white/55 sm:text-sm">
           {step}
         </div>
-        <div className="h-2 w-2 rounded-full bg-cyan-300/70" />
+        <div className="hidden h-2 w-2 rounded-full bg-cyan-300/70 sm:block" />
       </div>
       <div className="mt-3 break-words text-base font-extrabold text-white sm:text-lg">
         {title}
@@ -89,13 +89,13 @@ function LinkRow({
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
       className={[
-        "group relative flex items-center justify-between overflow-hidden",
+        "group relative flex items-center justify-center gap-3 overflow-hidden sm:justify-between",
         "rounded-2xl bg-black/35 px-4 py-3 ring-1 ring-white/10 sm:px-5 sm:py-4",
         "transition hover:-translate-y-[1px] hover:bg-black/25 hover:ring-white/20",
       ].join(" ")}
     >
       <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-cyan-300/60 via-indigo-400/30 to-transparent opacity-70" />
-      <div className="min-w-0 pr-4 text-sm font-semibold text-white/90 sm:text-base">
+      <div className="min-w-0 text-sm font-semibold text-white/90 sm:pr-4 sm:text-base">
         <span className="block truncate">{label}</span>
       </div>
       <div className="shrink-0 text-white/45 transition group-hover:text-white/75">
@@ -126,7 +126,7 @@ export default function Home() {
       <main className="relative z-10 mx-auto w-full max-w-[1240px] px-4 pt-4 pb-10 sm:px-6 sm:py-14 lg:max-w-[1400px] lg:px-10 2xl:max-w-[1560px]">
         {/* Row 1: Hero (left) + Reserve overview (right) */}
         <section className="grid gap-8 sm:gap-10 lg:grid-cols-12 lg:items-start">
-          <div className="lg:col-span-7">
+          <div className="text-center sm:text-left lg:col-span-7">
             <Reveal delayMs={30}>
               <h1
                 className={`${displayFont.className} break-words text-center text-3xl font-extrabold tracking-tight sm:text-left sm:text-5xl lg:text-6xl`}
@@ -138,7 +138,7 @@ export default function Home() {
             </Reveal>
 
             <Reveal delayMs={120}>
-              <p className="mt-4 max-w-2xl text-[13px] leading-5 text-white/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
+              <p className="mx-auto mt-4 max-w-2xl text-[13px] leading-5 text-white/75 sm:mx-0 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
                 {token.tagline}
               </p>
             </Reveal>
@@ -206,7 +206,7 @@ export default function Home() {
         </Reveal>
 
         {/* Row 2: How it works (left) + Links (right) */}
-        <section className="mt-12 grid gap-8 border-t border-white/10 pt-12 sm:mt-14 sm:gap-10 sm:pt-14 lg:grid-cols-12 lg:items-stretch">
+        <section className="mt-12 grid gap-8 border-t border-white/10 pt-12 text-center sm:mt-14 sm:gap-10 sm:pt-14 sm:text-left lg:grid-cols-12 lg:items-stretch">
           <div className="lg:col-span-7">
             <Reveal delayMs={60} className="h-full">
               <div
@@ -214,7 +214,7 @@ export default function Home() {
               >
                 How it works
               </div>
-              <div className="mt-2 max-w-3xl text-sm text-white/65 sm:text-base">
+              <div className="mx-auto mt-2 max-w-3xl text-sm text-white/65 sm:mx-0 sm:text-base">
                 Our strategy loop breakout
               </div>
 

@@ -7,6 +7,7 @@ import { LatestDomainsTerminal } from "@/components/LatestDomainsTerminal";
 import { CopyOnClickText } from "@/components/CopyOnClickText";
 import { Reveal } from "@/components/Reveal";
 import { CurationPipeline } from "@/components/CurationPipeline";
+import { OracleAgent } from "@/components/OracleAgent";
 import { DomainsBoughtValue } from "@/components/DomainsBoughtValue";
 import { TotalSpentValue } from "@/components/TotalSpentValue";
 import { token } from "@/lib/token";
@@ -212,6 +213,12 @@ export default function Home() {
         <Reveal delayMs={160}>
           <section className="mt-6 sm:mt-8">
             <CurationPipeline />
+          </section>
+        </Reveal>
+
+        <Reveal delayMs={180}>
+          <section className="mt-6 sm:mt-8">
+            <OracleAgent />
           </section>
         </Reveal>
 

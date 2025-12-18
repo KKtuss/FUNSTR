@@ -82,40 +82,30 @@ export async function GET(req: Request) {
     });
   }
 
-  if (process.env.FUNSTR_MOCK_DOMAINS === "1") {
-    const domains = buildMockDomains();
-    cache = {
-      at: Date.now(),
-      data: { domains, fetchedAt: new Date().toISOString(), mock: true },
-    };
-    return NextResponse.json(cache.data, {
-      headers: { "Cache-Control": "private, max-age=60" },
-    });
-  }
-
   const key = process.env.GODADDY_API_KEY;
   const secret = process.env.GODADDY_API_SECRET;
 
-  if (!key || !secret) {
-    const allowMock =
-      process.env.FUNSTR_MOCK_DOMAINS === "1" || process.env.NODE_ENV !== "production";
+  const forceMock = process.env.FUNSTR_MOCK_DOMAINS === "1";
+  const disableMock = process.env.FUNSTR_DISABLE_MOCK_DOMAINS === "1";
 
-    if (!allowMock) {
-      return jsonError(
-        501,
-        "GoDaddy API credentials are not configured. Set GODADDY_API_KEY and GODADDY_API_SECRET in .env.local."
-      );
+  // If creds aren't set (or mock is forced), return a mock list so the site
+  // still works in production before GoDaddy is configured.
+  if (forceMock || (!key || !secret)) {
+    if (!disableMock) {
+      const domains = buildMockDomains();
+      cache = {
+        at: Date.now(),
+        data: { domains, fetchedAt: new Date().toISOString(), mock: true },
+      };
+      return NextResponse.json(cache.data, {
+        headers: { "Cache-Control": "private, max-age=60" },
+      });
     }
 
-    const domains = buildMockDomains();
-    cache = {
-      at: Date.now(),
-      data: { domains, fetchedAt: new Date().toISOString(), mock: true },
-    };
-
-    return NextResponse.json(cache.data, {
-      headers: { "Cache-Control": "private, max-age=60" },
-    });
+    return jsonError(
+      501,
+      "GoDaddy API credentials are not configured. Set GODADDY_API_KEY and GODADDY_API_SECRET in .env.local."
+    );
   }
 
   const baseUrl = getGoDaddyBaseUrl();

@@ -82,17 +82,31 @@ export function IntroOverlay() {
     >
       <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6">
         <div className="flex flex-col items-center text-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logo.png"
-            alt="FUNSTRATEGY"
-            className={[
-              "w-full max-w-[420px] object-contain sm:max-w-[900px]",
-              "transform-gpu will-change-transform",
-              "transition-all duration-700 ease-[cubic-bezier(0.2,0.9,0.2,1)]",
-              logoIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
-            ].join(" ")}
-          />
+          <div className="relative w-full max-w-[420px] sm:max-w-[900px]">
+            <div
+              aria-hidden="true"
+              className={[
+                "pointer-events-none absolute inset-0 -z-10",
+                "scale-110 rounded-[56px] blur-3xl",
+                "bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.22),rgba(99,102,241,0.12),transparent_70%)]",
+                "transition-opacity duration-700 ease-[cubic-bezier(0.2,0.9,0.2,1)]",
+                logoIn ? "opacity-100" : "opacity-0",
+              ].join(" ")}
+            />
+
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.png"
+              alt="FUNSTRATEGY"
+              className={[
+                "w-full object-contain",
+                "transform-gpu will-change-transform",
+                "transition-all duration-700 ease-[cubic-bezier(0.2,0.9,0.2,1)]",
+                "drop-shadow-[0_0_18px_rgba(34,211,238,0.18)]",
+                logoIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
+              ].join(" ")}
+            />
+          </div>
 
           <button
             type="button"

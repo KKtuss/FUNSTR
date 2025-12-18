@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { LatestDomainsTerminal } from "@/components/LatestDomainsTerminal";
 import { CopyOnClickText } from "@/components/CopyOnClickText";
 import { Reveal } from "@/components/Reveal";
+import { CurationPipeline } from "@/components/CurationPipeline";
 import { token } from "@/lib/token";
 
 const displayFont = Space_Grotesk({
@@ -143,6 +144,20 @@ export default function Home() {
               </div>
             </Reveal>
 
+            {/* Mobile: keep CA visible without scrolling by placing it between the link and the stats */}
+            <Reveal delayMs={210} className="lg:hidden">
+              <div className="mt-4 text-center sm:mt-5">
+                <span className="text-sm font-semibold text-white/55">
+                  CA:
+                </span>{" "}
+                <CopyOnClickText
+                  text={token.contractAddress}
+                  className="inline-block max-w-full select-all break-all font-mono text-[13px] text-white/80 hover:text-white hover:underline cursor-pointer"
+                  copiedLabel="Copied"
+                />
+              </div>
+            </Reveal>
+
             <Reveal delayMs={240}>
               <div className="mt-8 grid gap-3 sm:mt-12 sm:grid-cols-2 sm:gap-5">
                 <Stat label="Domains bought" value={token.domainsBought ?? "0"} />
@@ -159,7 +174,8 @@ export default function Home() {
           </div>
         </section>
 
-        <Reveal delayMs={80}>
+        {/* Desktop: keep CA centered under the whole top row */}
+        <Reveal delayMs={80} className="hidden lg:block">
           <div className="mt-8 text-center sm:mt-10">
             <span className="text-sm font-semibold text-white/55 sm:text-base">
               CA:
@@ -172,12 +188,19 @@ export default function Home() {
           </div>
         </Reveal>
 
+        {/* Full-width: show the pipeline across the whole site width */}
+        <Reveal delayMs={160}>
+          <section className="mt-6 sm:mt-8">
+            <CurationPipeline />
+          </section>
+        </Reveal>
+
         {/* Row 2: How it works (left) + Links (right) */}
         <section className="mt-12 grid gap-8 border-t border-white/10 pt-12 sm:mt-14 sm:gap-10 sm:pt-14 lg:grid-cols-12 lg:items-stretch">
           <div className="lg:col-span-7">
             <Reveal delayMs={60} className="h-full">
               <div
-                className={`${displayFont.className} text-lg font-extrabold tracking-wide text-white sm:text-xl lg:text-2xl`}
+                className={`${displayFont.className} uppercase text-2xl font-extrabold tracking-wider text-white sm:text-3xl lg:text-4xl`}
               >
                 How it works
               </div>
@@ -225,7 +248,7 @@ export default function Home() {
             <Reveal delayMs={110} className="h-full">
               <div className="flex h-full flex-col">
                 <div
-                  className={`${displayFont.className} text-lg font-extrabold text-white sm:text-xl lg:text-2xl`}
+                  className={`${displayFont.className} uppercase text-2xl font-extrabold tracking-wider text-white sm:text-3xl lg:text-4xl`}
                 >
                   Project Links
                 </div>

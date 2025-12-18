@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 
 import type { GoDaddyDomain } from "@/lib/godaddy";
 import { getGoDaddyBaseUrl } from "@/lib/godaddy";
@@ -18,9 +20,12 @@ function jsonError(status: number, message: string) {
 }
 
 function buildMockDomains(): GoDaddyDomain[] {
+  // Keep mock timestamps stable-ish so “Added X ago” doesn’t look like it changes every refresh.
+  // Anchor to “yesterday” and space entries by 1 hour.
   const now = Date.now();
+  const base = now - 24 * 60 * 60 * 1000;
   return Array.from({ length: 10 }).map((_, i) => {
-    const createdAt = new Date(now - i * 60_000).toISOString();
+    const createdAt = new Date(base - i * 60 * 60 * 1000).toISOString();
     const expires = new Date(now + 1000 * 60 * 60 * 24 * 365).toISOString();
     return {
       domain: `funstr-${(1000 + i).toString().slice(-4)}.fun`,
@@ -34,6 +39,40 @@ function buildMockDomains(): GoDaddyDomain[] {
       nameServers: ["ns1.vercel-dns.com", "ns2.vercel-dns.com"],
     };
   });
+}
+
+async function readManualDomains(): Promise<GoDaddyDomain[] | null> {
+  const manualPath =
+    process.env.FUNSTR_MANUAL_DOMAINS_PATH ||
+    path.join(process.cwd(), "data", "domains.json");
+
+  try {
+    const raw = await readFile(manualPath, "utf8");
+    const parsed: unknown = JSON.parse(raw);
+    const list: unknown =
+      Array.isArray(parsed) ? parsed : (parsed as { domains?: unknown }).domains;
+    if (!Array.isArray(list)) return null;
+
+    const out: GoDaddyDomain[] = [];
+    for (const row of list) {
+      if (typeof row !== "object" || row === null || Array.isArray(row)) continue;
+      const rec = row as Record<string, unknown>;
+      const domain = typeof rec.domain === "string" ? rec.domain : "";
+      if (!domain) continue;
+      const createdAt = typeof rec.createdAt === "string" ? rec.createdAt : undefined;
+      out.push({
+        domain,
+        status: "ACTIVE",
+        createdAt,
+        renewalPeriod: 1,
+        locked: true,
+      });
+    }
+
+    return out.length ? out : null;
+  } catch {
+    return null;
+  }
 }
 
 function pickSearchParams(src: URLSearchParams, keys: string[]) {
@@ -87,15 +126,38 @@ export async function GET(req: Request) {
 
   const forceMock = process.env.FUNSTR_MOCK_DOMAINS === "1";
   const disableMock = process.env.FUNSTR_DISABLE_MOCK_DOMAINS === "1";
+  const forceManual = process.env.FUNSTR_MANUAL_DOMAINS === "1";
+
+  if (forceManual) {
+    const domains = (await readManualDomains()) ?? [];
+    cache = {
+      at: Date.now(),
+      data: { domains, fetchedAt: new Date().toISOString(), source: "manual" },
+    };
+    return NextResponse.json(cache.data, {
+      headers: { "Cache-Control": "private, max-age=60" },
+    });
+  }
 
   // If creds aren't set (or mock is forced), return a mock list so the site
   // still works in production before GoDaddy is configured.
   if (forceMock || (!key || !secret)) {
+    const manual = await readManualDomains();
+    if (manual && manual.length) {
+      cache = {
+        at: Date.now(),
+        data: { domains: manual, fetchedAt: new Date().toISOString(), source: "manual" },
+      };
+      return NextResponse.json(cache.data, {
+        headers: { "Cache-Control": "private, max-age=60" },
+      });
+    }
+
     if (!disableMock) {
       const domains = buildMockDomains();
       cache = {
         at: Date.now(),
-        data: { domains, fetchedAt: new Date().toISOString(), mock: true },
+        data: { domains, fetchedAt: new Date().toISOString(), mock: true, source: "mock" },
       };
       return NextResponse.json(cache.data, {
         headers: { "Cache-Control": "private, max-age=60" },
@@ -171,7 +233,7 @@ export async function GET(req: Request) {
     };
   });
 
-  cache = { at: Date.now(), data: { domains, fetchedAt: new Date().toISOString() } };
+  cache = { at: Date.now(), data: { domains, fetchedAt: new Date().toISOString(), source: "godaddy" } };
 
   return NextResponse.json(cache.data, {
     headers: { "Cache-Control": "private, max-age=60" },

@@ -260,7 +260,7 @@ export default function Home() {
                 <HowStep
                   step="03"
                   title="Grow the reserve"
-                  body="Our Domain Agent curates and holds the strongest names, tracks what performs, and reinvests into the next wave of winning domains."
+                  body="Our Domain Agent holds the strongest names, tracks what performs, and reinvests into the next wave of winning domains."
                 />
                 <HowStep
                   step="04"

@@ -17,6 +17,25 @@ function jsonError(status: number, message: string) {
   return NextResponse.json({ error: message }, { status });
 }
 
+function buildMockDomains(): GoDaddyDomain[] {
+  const now = Date.now();
+  return Array.from({ length: 10 }).map((_, i) => {
+    const createdAt = new Date(now - i * 60_000).toISOString();
+    const expires = new Date(now + 1000 * 60 * 60 * 24 * 365).toISOString();
+    return {
+      domain: `funstr-${(1000 + i).toString().slice(-4)}.fun`,
+      status: "ACTIVE",
+      createdAt,
+      expires,
+      renewalPeriod: 1,
+      privacy: i % 3 === 0,
+      autoRenew: i % 2 === 0,
+      locked: true,
+      nameServers: ["ns1.vercel-dns.com", "ns2.vercel-dns.com"],
+    };
+  });
+}
+
 function pickSearchParams(src: URLSearchParams, keys: string[]) {
   const out = new URLSearchParams();
   for (const key of keys) {
@@ -63,14 +82,40 @@ export async function GET(req: Request) {
     });
   }
 
+  if (process.env.FUNSTR_MOCK_DOMAINS === "1") {
+    const domains = buildMockDomains();
+    cache = {
+      at: Date.now(),
+      data: { domains, fetchedAt: new Date().toISOString(), mock: true },
+    };
+    return NextResponse.json(cache.data, {
+      headers: { "Cache-Control": "private, max-age=60" },
+    });
+  }
+
   const key = process.env.GODADDY_API_KEY;
   const secret = process.env.GODADDY_API_SECRET;
 
   if (!key || !secret) {
-    return jsonError(
-      501,
-      "GoDaddy API credentials are not configured. Set GODADDY_API_KEY and GODADDY_API_SECRET in .env.local."
-    );
+    const allowMock =
+      process.env.FUNSTR_MOCK_DOMAINS === "1" || process.env.NODE_ENV !== "production";
+
+    if (!allowMock) {
+      return jsonError(
+        501,
+        "GoDaddy API credentials are not configured. Set GODADDY_API_KEY and GODADDY_API_SECRET in .env.local."
+      );
+    }
+
+    const domains = buildMockDomains();
+    cache = {
+      at: Date.now(),
+      data: { domains, fetchedAt: new Date().toISOString(), mock: true },
+    };
+
+    return NextResponse.json(cache.data, {
+      headers: { "Cache-Control": "private, max-age=60" },
+    });
   }
 
   const baseUrl = getGoDaddyBaseUrl();

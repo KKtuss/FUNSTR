@@ -5,14 +5,22 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { CopyField } from "@/components/ui/CopyField";
 import { token } from "@/lib/token";
 
+function normalizeAmount(value: string) {
+  return value.replace(/^\s*[$€£]\s*/, "").trim();
+}
+
 function Stat({ label, value }: { label: string; value: string }) {
+  const v = normalizeAmount(value);
   return (
     <div className="rounded-3xl bg-white/5 p-4 ring-1 ring-white/10 sm:p-8">
       <div className="flex flex-col items-center text-center">
-        <div className="text-3xl font-extrabold tracking-tight text-cyan-200 sm:text-4xl">
-          {value}
+        <div className="text-3xl font-black tracking-tight text-cyan-200 sm:text-4xl">
+          {v}
         </div>
-        <div className="mt-2 text-xs font-semibold tracking-wide text-white/60 sm:text-sm">
+
+        <div className="mt-4 h-px w-full bg-white/10" />
+
+        <div className="mt-3 rounded-full bg-white/5 px-4 py-2 text-[11px] font-extrabold uppercase tracking-wider text-white/65 ring-1 ring-white/10 sm:text-xs">
           {label}
         </div>
       </div>

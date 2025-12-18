@@ -38,7 +38,7 @@ export const token: TokenConfig = {
   buyTax: "0%",
   sellTax: "0%",
   domainsBought: "0",
-  totalSpent: "$0",
+  totalSpent: "0",
   links: {
     buy: "https://example.com/buy",
     chart: "https://example.com/chart",

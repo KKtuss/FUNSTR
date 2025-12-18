@@ -8,11 +8,13 @@ import { token } from "@/lib/token";
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-3xl bg-white/5 p-4 ring-1 ring-white/10 sm:p-8">
-      <div className="text-xs font-semibold tracking-wide text-white/55 sm:text-sm">
-        {label}
-      </div>
-      <div className="mt-3 text-xl font-extrabold tracking-tight text-white sm:text-2xl">
-        {value}
+      <div className="flex flex-col items-center text-center">
+        <div className="text-3xl font-extrabold tracking-tight text-cyan-200 sm:text-4xl">
+          {value}
+        </div>
+        <div className="mt-2 text-xs font-semibold tracking-wide text-white/60 sm:text-sm">
+          {label}
+        </div>
       </div>
     </div>
   );

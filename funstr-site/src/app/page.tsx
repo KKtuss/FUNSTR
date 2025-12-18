@@ -168,8 +168,7 @@ export default function Home() {
               How it works
             </div>
             <div className="mt-2 max-w-3xl text-sm text-white/65 sm:text-base">
-              A simple loop: acquire great .fun names, route them to the project,
-              and reward creators as the reserve grows.
+              Our strategy loop breakout
             </div>
 
             <div className="mt-5 grid gap-3 sm:mt-7 sm:grid-cols-2 sm:gap-5">

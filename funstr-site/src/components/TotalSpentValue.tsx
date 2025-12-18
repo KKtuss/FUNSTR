@@ -12,7 +12,7 @@ type DomainsApiResponse =
 
 function fmtMoney(n: number) {
   // Display as 0.00 with dot decimals (user requested decimals after comma; UI uses dot).
-  return n.toFixed(2);
+  return `${n.toFixed(2)}$`;
 }
 
 export function TotalSpentValue({ placeholder = "…" }: { placeholder?: string }) {

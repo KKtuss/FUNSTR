@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { HeaderNav } from "@/components/HeaderNav";
 import { LogoMark } from "@/components/LogoMark";
 
 export function SiteHeader() {
@@ -17,20 +18,7 @@ export function SiteHeader() {
             <LogoMark alt="FUNSTRATEGY logo" size={120} />
           </Link>
 
-          <nav className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-wrap items-center gap-1 text-xs font-semibold sm:text-sm lg:gap-2">
-            <Link
-              href="/"
-              className="rounded-full px-3 py-2 text-white/80 hover:bg-white/10 hover:text-white sm:px-4"
-            >
-              Token
-            </Link>
-            <Link
-              href="/domains"
-              className="rounded-full px-3 py-2 text-white/80 hover:bg-white/10 hover:text-white sm:px-4"
-            >
-              Domains
-            </Link>
-          </nav>
+          <HeaderNav />
         </div>
       </div>
     </header>

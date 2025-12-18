@@ -91,7 +91,8 @@ export function IntroOverlay() {
             onClick={onEnter}
             className={[
               "mt-8 rounded-full px-7 py-4 text-base font-extrabold tracking-wide sm:mt-10 sm:px-10 sm:py-5 sm:text-lg",
-              "bg-white text-black hover:bg-white/90",
+              "bg-transparent text-white ring-1 ring-white/35 hover:ring-white/60 hover:bg-white/5",
+              "shadow-[0_0_0_1px_rgba(255,255,255,0.05)] hover:shadow-[0_0_18px_rgba(255,255,255,0.12)]",
               "transition-all duration-500",
               buttonIn
                 ? "opacity-100 translate-y-0"
@@ -100,16 +101,6 @@ export function IntroOverlay() {
           >
             Enter
           </button>
-
-          <div
-            className={[
-              "mt-5 text-xs font-semibold tracking-wide text-white/55",
-              "transition-opacity duration-500",
-              buttonIn ? "opacity-100" : "opacity-0",
-            ].join(" ")}
-          >
-            Press Enter to continue
-          </div>
         </div>
       </div>
     </div>

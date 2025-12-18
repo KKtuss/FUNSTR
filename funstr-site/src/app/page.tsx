@@ -123,13 +123,13 @@ export default function Home() {
 
       <SiteHeader />
 
-      <main className="relative z-10 mx-auto w-full max-w-[1240px] px-4 pt-2 pb-10 sm:px-6 sm:py-14 lg:max-w-[1400px] lg:px-10 2xl:max-w-[1560px]">
+      <main className="relative z-10 mx-auto w-full max-w-[1240px] px-4 pt-4 pb-10 sm:px-6 sm:py-14 lg:max-w-[1400px] lg:px-10 2xl:max-w-[1560px]">
         {/* Row 1: Hero (left) + Reserve overview (right) */}
         <section className="grid gap-8 sm:gap-10 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
             <Reveal delayMs={30}>
               <h1
-                className={`${displayFont.className} break-words text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl`}
+                className={`${displayFont.className} break-words text-center text-3xl font-extrabold tracking-tight sm:text-left sm:text-5xl lg:text-6xl`}
               >
                 <span className="text-white drop-shadow-[0_0_16px_rgba(255,255,255,0.22)] sm:drop-shadow-[0_0_20px_rgba(255,255,255,0.26)]">
                   WHY FUNSTRATEGY?

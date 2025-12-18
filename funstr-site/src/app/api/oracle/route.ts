@@ -350,7 +350,10 @@ function portfolioAnalysis(domains: GoDaddyDomain[], fetchedAt?: string, source?
   const seed = stableHash32(`oracle:suggest:${day}:${topTokens.join(",")}:${avgLabelLen}`);
   const rand = mulberry32(seed);
   const pick = <T,>(arr: T[]) => arr[Math.floor(rand() * arr.length)]!;
-  const tokenPool = [...GLOBAL_FUN_HINTS.strongTokens];
+  const tokenPool = [
+    ...GLOBAL_FUN_HINTS.keywordTokens,
+    ...GLOBAL_FUN_HINTS.suffixTokens,
+  ];
   const suffixPool = ["lab", "hub", "zone", "club", "studio", "vault", "room", "loop", "arena"];
   const suggestedDomains: string[] = [];
   while (suggestedDomains.length < 6) {

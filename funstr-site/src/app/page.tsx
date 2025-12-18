@@ -117,7 +117,9 @@ export default function Home() {
               className={`${displayFont.className} break-words text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl`}
             >
               <span className="bg-gradient-to-r from-cyan-200 via-sky-300 to-indigo-200 bg-clip-text text-transparent">
-                FUNSTRATEGY
+                <span className="drop-shadow-[0_0_14px_rgba(56,189,248,0.28)] sm:drop-shadow-[0_0_18px_rgba(56,189,248,0.32)]">
+                  FUNSTRATEGY
+                </span>
               </span>
               <span className="text-white/70"> ($FUNSTR)</span>
             </h1>

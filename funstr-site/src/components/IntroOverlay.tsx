@@ -8,13 +8,12 @@ export function IntroOverlay() {
 
   // Start visible so blur + logo are present immediately on first paint.
   const [visible, setVisible] = React.useState(true);
+  const [logoIn, setLogoIn] = React.useState(false);
   const [buttonIn, setButtonIn] = React.useState(false);
   const [exiting, setExiting] = React.useState(false);
+  const didInit = React.useRef(false);
 
   const onEnter = React.useCallback(() => {
-    const key = "funstr_intro_done";
-    sessionStorage.setItem(key, "1");
-
     // Trigger slide-up animation.
     setExiting(true);
 
@@ -25,29 +24,32 @@ export function IntroOverlay() {
     }, 750);
   }, []);
 
-  // Show once per session, but never on /parked.
+  // Show on every full page load/refresh, but never on /parked.
   React.useEffect(() => {
     if (pathname?.startsWith("/parked")) {
       setVisible(false);
+      document.body.style.overflow = "";
       return;
     }
 
-    const key = "funstr_intro_done";
-    const done = sessionStorage.getItem(key) === "1";
-    if (done) {
-      setVisible(false);
+    // Don't re-show on client-side navigation; only on refresh (component remount).
+    if (didInit.current) {
       return;
     }
+    didInit.current = true;
 
     setVisible(true);
     setExiting(false);
+    setLogoIn(false);
     setButtonIn(false);
 
     // Lock scroll while visible.
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    const t = window.setTimeout(() => setButtonIn(true), 650);
+    // Animate logo in first, then show the button.
+    const t0 = window.setTimeout(() => setLogoIn(true), 90);
+    const t1 = window.setTimeout(() => setButtonIn(true), 650);
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
@@ -58,7 +60,8 @@ export function IntroOverlay() {
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
-      window.clearTimeout(t);
+      window.clearTimeout(t0);
+      window.clearTimeout(t1);
       window.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = prevOverflow;
     };
@@ -83,7 +86,12 @@ export function IntroOverlay() {
           <img
             src="/logo.png"
             alt="FUNSTRATEGY"
-            className="w-full max-w-[420px] object-contain sm:max-w-[900px]"
+            className={[
+              "w-full max-w-[420px] object-contain sm:max-w-[900px]",
+              "transform-gpu will-change-transform",
+              "transition-all duration-700 ease-[cubic-bezier(0.2,0.9,0.2,1)]",
+              logoIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
+            ].join(" ")}
           />
 
           <button

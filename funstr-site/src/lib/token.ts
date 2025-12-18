@@ -30,7 +30,7 @@ export const token: TokenConfig = {
   name: "FUNSTRATEGY",
   symbol: "FUNSTR",
   tagline:
-    "In an era of .fun, it seems only logical that strategy meet memes. At FUNSTR, we're building a strategic reserve of .fun domains with creator rewards, turning FUNSTR in the leader and most active investor of the .fun trademark.",
+    "In the era of .fun, it’s only natural for strategy to meet memes. At FUNSTRATEGY, we're building a strategic reserve of .fun domains with creator rewards, establishing $FUNSTR as the leading force behind the .fun trademark.",
   chain: "EVM (update me)",
   contractAddress: "0x0000000000000000000000000000000000000000",
   decimals: 18,

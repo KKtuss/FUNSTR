@@ -5,6 +5,7 @@ import { BackgroundVideo } from "@/components/BackgroundVideo";
 import { SiteHeader } from "@/components/SiteHeader";
 import { LatestDomainsTerminal } from "@/components/LatestDomainsTerminal";
 import { CopyOnClickText } from "@/components/CopyOnClickText";
+import { Reveal } from "@/components/Reveal";
 import { token } from "@/lib/token";
 
 const displayFont = Space_Grotesk({
@@ -19,7 +20,7 @@ function normalizeAmount(value: string) {
 function Stat({ label, value }: { label: string; value: string }) {
   const v = normalizeAmount(value);
   return (
-    <div className="rounded-3xl bg-black/35 p-4 ring-1 ring-white/10 sm:p-8">
+    <div className="rounded-3xl bg-black/35 p-4 ring-1 ring-white/10 transition-transform duration-300 hover:-translate-y-[2px] hover:ring-white/20 sm:p-8">
       <div className="flex flex-col items-center text-center">
         <div className="text-3xl font-black tracking-tight text-cyan-200 sm:text-4xl">
           {v}
@@ -45,7 +46,7 @@ function HowStep({
   body: React.ReactNode;
 }) {
   return (
-    <div className="rounded-3xl bg-black/35 p-4 ring-1 ring-white/10 sm:p-8">
+    <div className="rounded-3xl bg-black/35 p-4 ring-1 ring-white/10 transition-transform duration-300 hover:-translate-y-[2px] hover:ring-white/20 sm:p-8">
       <div className="flex items-center justify-between">
         <div className="text-xs font-extrabold tracking-wide text-white/55 sm:text-sm">
           {step}
@@ -115,115 +116,136 @@ export default function Home() {
         {/* Row 1: Hero (left) + Reserve overview (right) */}
         <section className="grid gap-8 sm:gap-10 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
-            <h1
-              className={`${displayFont.className} break-words text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl`}
-            >
-              <span className="text-white drop-shadow-[0_0_16px_rgba(255,255,255,0.22)] sm:drop-shadow-[0_0_20px_rgba(255,255,255,0.26)]">
-                WHY FUNSTRATEGY?
-              </span>
-            </h1>
-
-            <p className="mt-4 max-w-2xl text-[13px] leading-5 text-white/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
-              {token.tagline}
-            </p>
-
-            <div className="mt-4 sm:mt-5">
-              <Link
-                href="/domains"
-                className="text-sm font-semibold text-white/80 hover:text-white hover:underline sm:text-base"
+            <Reveal delayMs={30}>
+              <h1
+                className={`${displayFont.className} break-words text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl`}
               >
-                View .fun domains reserve →
-              </Link>
-            </div>
+                <span className="text-white drop-shadow-[0_0_16px_rgba(255,255,255,0.22)] sm:drop-shadow-[0_0_20px_rgba(255,255,255,0.26)]">
+                  WHY FUNSTRATEGY?
+                </span>
+              </h1>
+            </Reveal>
 
-            <div className="mt-8 grid gap-3 sm:mt-12 sm:grid-cols-2 sm:gap-5">
-              <Stat label="Domains bought" value={token.domainsBought ?? "0"} />
-              <Stat label="Total spent" value={token.totalSpent ?? "0"} />
-            </div>
+            <Reveal delayMs={120}>
+              <p className="mt-4 max-w-2xl text-[13px] leading-5 text-white/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
+                {token.tagline}
+              </p>
+            </Reveal>
+
+            <Reveal delayMs={170}>
+              <div className="mt-4 sm:mt-5">
+                <Link
+                  href="/domains"
+                  className="text-sm font-semibold text-white/80 hover:text-white hover:underline sm:text-base"
+                >
+                  View .fun domains reserve →
+                </Link>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={240}>
+              <div className="mt-8 grid gap-3 sm:mt-12 sm:grid-cols-2 sm:gap-5">
+                <Stat label="Domains bought" value={token.domainsBought ?? "0"} />
+                <Stat label="Total spent" value={token.totalSpent ?? "0"} />
+              </div>
+            </Reveal>
 
           </div>
 
           <div className="lg:col-span-5">
-            <LatestDomainsTerminal />
+            <Reveal delayMs={140}>
+              <LatestDomainsTerminal />
+            </Reveal>
           </div>
         </section>
 
-        <div className="mt-8 text-center sm:mt-10">
-          <span className="text-sm font-semibold text-white/55 sm:text-base">
-            CA:
-          </span>{" "}
-          <CopyOnClickText
-            text={token.contractAddress}
-            className="inline-block max-w-full select-all break-all font-mono text-[13px] text-white/80 hover:text-white hover:underline sm:text-base cursor-pointer"
-            copiedLabel="Copied"
-          />
-        </div>
+        <Reveal delayMs={80}>
+          <div className="mt-8 text-center sm:mt-10">
+            <span className="text-sm font-semibold text-white/55 sm:text-base">
+              CA:
+            </span>{" "}
+            <CopyOnClickText
+              text={token.contractAddress}
+              className="inline-block max-w-full select-all break-all font-mono text-[13px] text-white/80 hover:text-white hover:underline sm:text-base cursor-pointer"
+              copiedLabel="Copied"
+            />
+          </div>
+        </Reveal>
 
         {/* Row 2: How it works (left) + Links (right) */}
         <section className="mt-12 grid gap-8 border-t border-white/10 pt-12 sm:mt-14 sm:gap-10 sm:pt-14 lg:grid-cols-12 lg:items-stretch">
           <div className="lg:col-span-7">
-            <div
-              className={`${displayFont.className} text-lg font-extrabold tracking-wide text-white sm:text-xl lg:text-2xl`}
-            >
-              How it works
-            </div>
-            <div className="mt-2 max-w-3xl text-sm text-white/65 sm:text-base">
-              Our strategy loop breakout
-            </div>
+            <Reveal delayMs={60} className="h-full">
+              <div
+                className={`${displayFont.className} text-lg font-extrabold tracking-wide text-white sm:text-xl lg:text-2xl`}
+              >
+                How it works
+              </div>
+              <div className="mt-2 max-w-3xl text-sm text-white/65 sm:text-base">
+                Our strategy loop breakout
+              </div>
 
-            <div className="mt-5 grid gap-3 sm:mt-7 sm:grid-cols-2 sm:gap-5">
-              <HowStep
-                step="01"
-                title="Domain acquisition"
-                body="Automated procurement of random .fun domain funded by creator fees at a rate of two domains per minute"
-              />
-              <HowStep
-                step="02"
-                title="Route to parked pages"
-                body={
-                  <>
-                    Each domain points to our{" "}
-                    <Link
-                      href="/parked"
-                      className="font-semibold text-white/80 hover:text-white hover:underline"
-                    >
-                      parked page
-                    </Link>{" "}
-                    and shows the FUNSTRATEGY-owned landing page.
-                  </>
-                }
-              />
-              <HowStep
-                step="03"
-                title="Grow the reserve"
-                body="We curate and hold the strongest names, measure what performs, and reinvest into the next wave of domains."
-              />
-              <HowStep
-                step="04"
-                title="Increase our exposure"
-                body="Every new .fun domain expands reach and attention across the ecosystem."
-              />
-            </div>
+              <div className="mt-5 grid gap-3 sm:mt-7 sm:grid-cols-2 sm:gap-5">
+                <HowStep
+                  step="01"
+                  title="Domain acquisition"
+                  body="Automated procurement of random .fun domain funded by creator fees at a rate of two domains per minute"
+                />
+                <HowStep
+                  step="02"
+                  title="Route to parked pages"
+                  body={
+                    <>
+                      Each domain points to our{" "}
+                      <Link
+                        href="/parked"
+                        className="font-semibold text-white/80 hover:text-white hover:underline"
+                      >
+                        parked page
+                      </Link>{" "}
+                      and shows the FUNSTRATEGY-owned landing page.
+                    </>
+                  }
+                />
+                <HowStep
+                  step="03"
+                  title="Grow the reserve"
+                  body="We curate and hold the strongest names, measure what performs, and reinvest into the next wave of domains."
+                />
+                <HowStep
+                  step="04"
+                  title="Increase our exposure"
+                  body="Every new .fun domain expands reach and attention across the ecosystem."
+                />
+              </div>
+            </Reveal>
           </div>
 
           <div className="lg:col-span-5 lg:self-stretch">
-            <div className="flex h-full flex-col">
-              <div
-                className={`${displayFont.className} text-lg font-extrabold text-white sm:text-xl lg:text-2xl`}
-              >
-                Project Links
-              </div>
-              <div className="mt-2 text-sm text-white/60">
-                Official destinations and resources.
-              </div>
+            <Reveal delayMs={110} className="h-full">
+              <div className="flex h-full flex-col">
+                <div
+                  className={`${displayFont.className} text-lg font-extrabold text-white sm:text-xl lg:text-2xl`}
+                >
+                  Project Links
+                </div>
+                <div className="mt-2 text-sm text-white/60">
+                  Official destinations and resources.
+                </div>
 
-              <div className="mt-5 flex flex-col gap-3 sm:mt-6 lg:flex-1 lg:[&>a]:flex-1">
-                {actions.map((a) => (
-                  <LinkRow key={a.label} label={a.label} href={a.href} external />
-                ))}
-                <LinkRow label="Domains (live list)" href="/domains" />
+                <div className="mt-5 flex flex-col gap-3 sm:mt-6 lg:flex-1 lg:[&>a]:flex-1">
+                  {actions.map((a) => (
+                    <LinkRow
+                      key={a.label}
+                      label={a.label}
+                      href={a.href}
+                      external
+                    />
+                  ))}
+                  <LinkRow label="Domains (live list)" href="/domains" />
+                </div>
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
 

@@ -116,8 +116,10 @@ export default function Home() {
             <h1
               className={`${displayFont.className} break-words text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl`}
             >
-              FUNSTRATEGY
-              <span className="text-white/60"> ($FUNSTR)</span>
+              <span className="bg-gradient-to-r from-cyan-200 via-sky-300 to-indigo-200 bg-clip-text text-transparent">
+                FUNSTRATEGY
+              </span>
+              <span className="text-white/70"> ($FUNSTR)</span>
             </h1>
 
             <p className="mt-4 max-w-2xl text-[13px] leading-5 text-white/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">

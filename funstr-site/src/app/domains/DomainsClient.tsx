@@ -13,6 +13,7 @@ type DomainRow = {
   privacy?: boolean;
   autoRenew?: boolean;
   locked?: boolean;
+  priceUsd?: number;
 };
 
 type ApiResponse =
@@ -31,6 +32,11 @@ function fmtDate(iso?: string) {
     month: "short",
     day: "2-digit",
   }).format(d);
+}
+
+function fmtUsd(n?: number) {
+  if (typeof n !== "number" || Number.isNaN(n)) return "—";
+  return `$${n.toFixed(2)}`;
 }
 
 function cn(...parts: Array<string | undefined | false>) {
@@ -147,10 +153,11 @@ export function DomainsClient() {
       </div>
 
       <div className="grid grid-cols-6 gap-0 border-b border-white/10 px-4 py-3 text-xs font-semibold tracking-wide text-white/50 sm:px-6 sm:py-4 sm:text-sm sm:grid-cols-12">
-        <div className="col-span-5 sm:col-span-5">Domain</div>
+        <div className="col-span-5 sm:col-span-4">Domain</div>
         <div className="hidden sm:col-span-2 sm:block">Status</div>
         <div className="hidden sm:col-span-2 sm:block">Created</div>
         <div className="hidden sm:col-span-2 sm:block">Expires</div>
+        <div className="hidden sm:col-span-1 sm:block text-right">Price</div>
         <div className="col-span-1 text-right sm:col-span-1">Flags</div>
       </div>
 
@@ -199,7 +206,7 @@ export function DomainsClient() {
                   }}
                 >
                   <a
-                    className="col-span-5 truncate font-semibold text-white/90 hover:underline sm:col-span-5"
+                    className="col-span-5 truncate font-semibold text-white/90 hover:underline sm:col-span-4"
                     href={`https://${d.domain}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -215,6 +222,9 @@ export function DomainsClient() {
                   </div>
                   <div className="hidden sm:col-span-2 sm:block text-white/70">
                     {fmtDate(d.expires)}
+                  </div>
+                  <div className="hidden sm:col-span-1 sm:block text-right font-mono text-[12px] text-white/60">
+                    {fmtUsd(d.priceUsd)}
                   </div>
                   <div className="col-span-1 text-right font-mono text-[12px] text-white/55 sm:col-span-1">
                     {flags || "—"}

@@ -8,6 +8,11 @@ export type GoDaddyDomain = {
   autoRenew?: boolean;
   locked?: boolean;
   nameServers?: string[];
+  /**
+   * Synthetic purchase price (USD). Used for prop/mock/manual reserve previews.
+   * Not sourced from GoDaddy.
+   */
+  priceUsd?: number;
 };
 
 export function getGoDaddyBaseUrl() {

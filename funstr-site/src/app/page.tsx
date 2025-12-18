@@ -8,6 +8,7 @@ import { CopyOnClickText } from "@/components/CopyOnClickText";
 import { Reveal } from "@/components/Reveal";
 import { CurationPipeline } from "@/components/CurationPipeline";
 import { DomainsBoughtValue } from "@/components/DomainsBoughtValue";
+import { TotalSpentValue } from "@/components/TotalSpentValue";
 import { token } from "@/lib/token";
 
 const displayFont = Space_Grotesk({
@@ -170,7 +171,7 @@ export default function Home() {
             <Reveal delayMs={240}>
               <div className="mt-8 grid gap-3 sm:mt-12 sm:grid-cols-2 sm:gap-5">
                 <Stat label="Domains bought" valueNode={<DomainsBoughtValue />} />
-                <Stat label="Total spent" value={token.totalSpent ?? "0"} />
+                <Stat label="Total spent" valueNode={<TotalSpentValue />} />
               </div>
             </Reveal>
 

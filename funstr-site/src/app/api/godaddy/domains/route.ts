@@ -150,6 +150,34 @@ function buildMockDomains(): GoDaddyDomain[] {
   return out;
 }
 
+function priceForDomainUsd(domain: string) {
+  // Deterministic price per domain so it feels random but doesn’t change on refresh.
+  // Range: 2.00 .. 10.00 (inclusive-ish).
+  let h = 2166136261;
+  for (let i = 0; i < domain.length; i++) {
+    h ^= domain.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  const r = (h % 1_000_000) / 1_000_000; // 0..1
+  const price = 2 + r * 8;
+  return Math.round(price * 100) / 100;
+}
+
+function attachPrices(domains: GoDaddyDomain[]) {
+  return domains.map((d) => ({
+    ...d,
+    priceUsd: typeof d.domain === "string" && d.domain ? priceForDomainUsd(d.domain) : undefined,
+  }));
+}
+
+function sumTotalSpentUsd(domains: Array<{ priceUsd?: number }>) {
+  return (
+    Math.round(
+      domains.reduce((acc, d) => acc + (typeof d.priceUsd === "number" ? d.priceUsd : 0), 0) * 100
+    ) / 100
+  );
+}
+
 async function readManualDomains(): Promise<GoDaddyDomain[] | null> {
   const manualPath =
     process.env.FUNSTR_MANUAL_DOMAINS_PATH ||
@@ -238,10 +266,15 @@ export async function GET(req: Request) {
   const forceManual = process.env.FUNSTR_MANUAL_DOMAINS === "1";
 
   if (forceManual) {
-    const domains = (await readManualDomains()) ?? [];
+    const domains = attachPrices((await readManualDomains()) ?? []);
     cache = {
       at: Date.now(),
-      data: { domains, fetchedAt: new Date().toISOString(), source: "manual" },
+      data: {
+        domains,
+        fetchedAt: new Date().toISOString(),
+        source: "manual",
+        stats: { domainsBought: domains.length, totalSpentUsd: sumTotalSpentUsd(domains) },
+      },
     };
     return NextResponse.json(cache.data, {
       headers: { "Cache-Control": "private, max-age=60" },
@@ -253,9 +286,15 @@ export async function GET(req: Request) {
   if (forceMock || (!key || !secret)) {
     const manual = await readManualDomains();
     if (manual && manual.length) {
+      const domains = attachPrices(manual);
       cache = {
         at: Date.now(),
-        data: { domains: manual, fetchedAt: new Date().toISOString(), source: "manual" },
+        data: {
+          domains,
+          fetchedAt: new Date().toISOString(),
+          source: "manual",
+          stats: { domainsBought: domains.length, totalSpentUsd: sumTotalSpentUsd(domains) },
+        },
       };
       return NextResponse.json(cache.data, {
         headers: { "Cache-Control": "private, max-age=60" },
@@ -263,10 +302,16 @@ export async function GET(req: Request) {
     }
 
     if (!disableMock) {
-      const domains = buildMockDomains();
+      const domains = attachPrices(buildMockDomains());
       cache = {
         at: Date.now(),
-        data: { domains, fetchedAt: new Date().toISOString(), mock: true, source: "mock" },
+        data: {
+          domains,
+          fetchedAt: new Date().toISOString(),
+          mock: true,
+          source: "mock",
+          stats: { domainsBought: domains.length, totalSpentUsd: sumTotalSpentUsd(domains) },
+        },
       };
       return NextResponse.json(cache.data, {
         headers: { "Cache-Control": "private, max-age=60" },
@@ -342,7 +387,16 @@ export async function GET(req: Request) {
     };
   });
 
-  cache = { at: Date.now(), data: { domains, fetchedAt: new Date().toISOString(), source: "godaddy" } };
+  const withPrices = attachPrices(domains);
+  cache = {
+    at: Date.now(),
+    data: {
+      domains: withPrices,
+      fetchedAt: new Date().toISOString(),
+      source: "godaddy",
+      stats: { domainsBought: withPrices.length, totalSpentUsd: sumTotalSpentUsd(withPrices) },
+    },
+  };
 
   return NextResponse.json(cache.data, {
     headers: { "Cache-Control": "private, max-age=60" },

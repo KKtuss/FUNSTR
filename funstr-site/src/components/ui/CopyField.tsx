@@ -6,6 +6,12 @@ function cn(...parts: Array<string | undefined | false>) {
   return parts.filter(Boolean).join(" ");
 }
 
+function compactMiddle(value: string) {
+  const v = value ?? "";
+  if (v.length <= 18) return v;
+  return `${v.slice(0, 6)}…${v.slice(-4)}`;
+}
+
 export function CopyField({
   label,
   value,
@@ -16,6 +22,7 @@ export function CopyField({
   monospace?: boolean;
 }) {
   const [copied, setCopied] = React.useState(false);
+  const compact = React.useMemo(() => compactMiddle(value), [value]);
 
   async function onCopy() {
     try {
@@ -32,7 +39,7 @@ export function CopyField({
       <div className="mb-2 text-xs font-semibold tracking-wide text-white/60 sm:text-sm">
         {label}
       </div>
-      <div className="flex items-center gap-2 rounded-2xl bg-white/5 p-2 ring-1 ring-white/10 sm:gap-3 sm:p-3">
+      <div className="flex min-w-0 items-center gap-2 overflow-hidden rounded-2xl bg-white/5 p-2 ring-1 ring-white/10 sm:gap-3 sm:p-3">
         <div
           className={cn(
             "min-w-0 flex-1 truncate px-3 py-2 text-sm text-white/90 sm:px-4 sm:py-3 sm:text-base",
@@ -40,7 +47,8 @@ export function CopyField({
           )}
           title={value}
         >
-          {value}
+          <span className="block sm:hidden">{compact}</span>
+          <span className="hidden sm:block">{value}</span>
         </div>
         <button
           type="button"

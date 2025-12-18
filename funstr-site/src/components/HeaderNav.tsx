@@ -12,14 +12,14 @@ export function HeaderNav() {
       {onDomains ? (
         <Link
           href="/"
-          className="rounded-full px-3 py-2 text-white/80 hover:bg-white/10 hover:text-white sm:px-4"
+          className="px-1 py-1 text-white/75 hover:text-white hover:underline underline-offset-4 sm:px-2"
         >
           Token
         </Link>
       ) : (
         <Link
           href="/domains"
-          className="rounded-full px-3 py-2 text-white/80 hover:bg-white/10 hover:text-white sm:px-4"
+          className="px-1 py-1 text-white/75 hover:text-white hover:underline underline-offset-4 sm:px-2"
         >
           Domains
         </Link>

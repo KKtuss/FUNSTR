@@ -84,7 +84,7 @@ export function DomainsClient() {
   });
 
   return (
-    <div className="rounded-3xl bg-white/5 ring-1 ring-white/10">
+    <div className="rounded-3xl bg-black/35 ring-1 ring-white/10">
       <div className="flex flex-col gap-3 border-b border-white/10 p-4 sm:p-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="text-sm font-extrabold text-white sm:text-base">Domains</div>
@@ -124,7 +124,7 @@ export function DomainsClient() {
             />
           </div>
 
-          <label className="mt-1 inline-flex items-center gap-2 rounded-2xl bg-white/5 px-4 py-3 text-sm font-semibold text-white/75 ring-1 ring-white/10 hover:bg-white/10 sm:mt-7 sm:px-5 sm:py-4 sm:text-base">
+          <label className="mt-1 inline-flex items-center gap-2 rounded-2xl bg-black/30 px-4 py-3 text-sm font-semibold text-white/75 ring-1 ring-white/10 hover:bg-black/25 sm:mt-7 sm:px-5 sm:py-4 sm:text-base">
             <input
               type="checkbox"
               checked={onlyAutoRenew}
@@ -134,7 +134,7 @@ export function DomainsClient() {
             Auto-renew only
           </label>
 
-          <label className="mt-1 inline-flex items-center gap-2 rounded-2xl bg-white/5 px-4 py-3 text-sm font-semibold text-white/75 ring-1 ring-white/10 hover:bg-white/10 sm:mt-7 sm:px-5 sm:py-4 sm:text-base">
+          <label className="mt-1 inline-flex items-center gap-2 rounded-2xl bg-black/30 px-4 py-3 text-sm font-semibold text-white/75 ring-1 ring-white/10 hover:bg-black/25 sm:mt-7 sm:px-5 sm:py-4 sm:text-base">
             <input
               type="checkbox"
               checked={onlyPrivacy}

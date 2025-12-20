@@ -185,10 +185,13 @@ function scoreToken(value: string, tokenCount: number, today: string) {
     ["ai", "strawberry", "loop", "instant", "idols", "creator", "labs", "studio", "market", "trade", "coin", "dex", "swap", "memes", "meme", "fun", "play", "vault", "reserve"].includes(
       t
     )
-      ? 8
+      ? 12
       : 0;
 
-  const base = (lenScore + vowelScore + syllScore + momentum + keywordBump) * regime;
+  // Penalty for overused keywords we want to deprioritize
+  const penalty = ["party", "clip", "quiz"].includes(t) ? -15 : 0;
+
+  const base = (lenScore + vowelScore + syllScore + momentum + keywordBump + penalty) * regime;
   return clamp(base, 0, 100);
 }
 

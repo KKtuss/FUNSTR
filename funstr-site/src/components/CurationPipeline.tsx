@@ -189,7 +189,7 @@ function scoreToken(value: string, tokenCount: number, today: string) {
       : 0;
 
   // Penalty for overused keywords we want to deprioritize
-  const penalty = ["party", "clip", "quiz"].includes(t) ? -15 : 0;
+  const penalty = ["party", "clip", "quiz", "game", "games"].includes(t) ? -25 : 0;
 
   const base = (lenScore + vowelScore + syllScore + momentum + keywordBump + penalty) * regime;
   return clamp(base, 0, 100);
@@ -540,8 +540,8 @@ export function CurationPipeline() {
     // Core .fun / entertainment
     ["fun", 96],
     ["play", 88],
-    ["game", 70], // Reduced from 86
-    ["games", 68], // Reduced from 84
+    ["game", 30], // Reduced from 86
+    ["games", 28], // Reduced from 84
     ["party", 38], // Reduced from 78
     ["vibe", 80],
     ["laugh", 74],
@@ -676,10 +676,23 @@ export function CurationPipeline() {
     };
   });
 
-  const topKeywords = marketSignalsAll
-    .filter((s) => s.key.startsWith("token:"))
+  // Top keywords: prioritize market-validated keywords (ai, creator, novelty terms)
+  const marketValidatedKeywords = ["token:ai", "token:creator", "token:strawberry", "token:loop", "token:instant", "token:idols"];
+  const marketValidatedSignals = marketSignalsAll
+    .filter((s) => marketValidatedKeywords.includes(s.key))
     .sort((a, b) => b.dominance - a.dominance)
     .slice(0, 3);
+  
+  // If we have 3 market-validated keywords, use those; otherwise fill with top overall
+  const topKeywords = marketValidatedSignals.length >= 3
+    ? marketValidatedSignals
+    : [
+        ...marketValidatedSignals,
+        ...marketSignalsAll
+          .filter((s) => s.key.startsWith("token:") && !marketValidatedKeywords.includes(s.key))
+          .sort((a, b) => b.dominance - a.dominance)
+          .slice(0, 3 - marketValidatedSignals.length)
+      ];
 
   const marketShapeBaseline = weightedShapeBaseline(globalShapeWeights);
 

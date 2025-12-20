@@ -91,7 +91,7 @@ export default function WhitepaperPage() {
 
                   <h3 className="mb-3 mt-6 text-xl font-bold text-cyan-200">3.3 Automated Owned Domain Curation</h3>
                   <p className="mb-3">
-                    A scheduled cron job runs daily to automatically curate and analyze owned domains:
+                    Our custom Domain Agent automatically curates and analyzes owned domains:
                   </p>
                   <ul className="ml-6 list-disc space-y-2">
                     <li>Consistent daily evaluation of portfolio performance</li>
@@ -104,32 +104,24 @@ export default function WhitepaperPage() {
                 <section>
                   <h2 className="mb-4 text-2xl font-extrabold text-white sm:text-3xl">4. Market Analysis</h2>
                   <p className="mb-4">
-                    Our system maintains a comprehensive view of the .fun domain market, tracking:
-                  </p>
-                  <ul className="mb-4 ml-6 list-disc space-y-2">
-                    <li><strong>Top Market Criteria:</strong> Most searched and in-demand keywords and patterns</li>
-                    <li><strong>Structure Patterns:</strong> Analysis of domain length, hyphens, and digit usage</li>
-                    <li><strong>Market Dominance:</strong> Share percentages for trending criteria</li>
-                    <li><strong>Baseline Statistics:</strong> Average characteristics of premium .fun domains</li>
-                  </ul>
-                  <p>
-                    This market intelligence ensures our acquisitions align with current trends and future potential.
+                    Our system maintains a comprehensive view of the .fun domain market, tracking top market criteria 
+                    including the most searched and in-demand keywords and patterns. We analyze structure patterns such 
+                    as domain length, hyphens, and digit usage to understand market preferences. Market dominance metrics 
+                    calculate share percentages for trending criteria, while baseline statistics capture the average 
+                    characteristics of premium .fun domains. This market intelligence ensures our acquisitions align with 
+                    current trends and future potential.
                   </p>
                 </section>
 
                 <section>
                   <h2 className="mb-4 text-2xl font-extrabold text-white sm:text-3xl">5. Domain Scoring</h2>
                   <p className="mb-4">
-                    Each domain is evaluated using a multi-factor scoring system that considers:
+                    Each domain is evaluated using a multi-factor scoring system that considers length (optimal domain 
+                    length for memorability and brandability), structure (clean, readable formats preferred over complex 
+                    patterns), and brandability (letters-only domains with strong brand potential). The system also 
+                    evaluates pronounceability (ease of saying and remembering), market alignment (relevance to current 
+                    market trends and demand), and portfolio fit (how well the domain complements existing holdings).
                   </p>
-                  <ul className="ml-6 list-disc space-y-2">
-                    <li><strong>Length:</strong> Optimal domain length for memorability and brandability</li>
-                    <li><strong>Structure:</strong> Clean, readable formats preferred over complex patterns</li>
-                    <li><strong>Brandability:</strong> Letters-only domains with strong brand potential</li>
-                    <li><strong>Pronounceability:</strong> Easy to say and remember</li>
-                    <li><strong>Market Alignment:</strong> Relevance to current market trends and demand</li>
-                    <li><strong>Portfolio Fit:</strong> How well the domain complements existing holdings</li>
-                  </ul>
                 </section>
 
                 <section>
@@ -149,31 +141,22 @@ export default function WhitepaperPage() {
                 <section>
                   <h2 className="mb-4 text-2xl font-extrabold text-white sm:text-3xl">7. Security & Reliability</h2>
                   <p className="mb-4">
-                    FUNSTRATEGY prioritizes security and reliability in all operations:
+                    FUNSTRATEGY prioritizes security and reliability in all operations through secure credential 
+                    management and API authentication, respectful rate limiting to maintain system stability, and 
+                    comprehensive error handling and recovery mechanisms. All acquisition decisions are logged for 
+                    complete audit trails, while budget controls and spending limits prevent overspending. Multiple 
+                    validation layers ensure accuracy before any purchase is executed.
                   </p>
-                  <ul className="ml-6 list-disc space-y-2">
-                    <li>Secure credential management and API authentication</li>
-                    <li>Respectful rate limiting to maintain system stability</li>
-                    <li>Comprehensive error handling and recovery mechanisms</li>
-                    <li>Complete audit logging of all acquisition decisions</li>
-                    <li>Budget controls and spending limits</li>
-                    <li>Multiple validation layers before any purchase</li>
-                  </ul>
                 </section>
 
                 <section>
                   <h2 className="mb-4 text-2xl font-extrabold text-white sm:text-3xl">8. Future Vision</h2>
                   <p className="mb-4">
-                    FUNSTRATEGY is continuously evolving. Planned enhancements include:
+                    FUNSTRATEGY is continuously evolving. Planned enhancements include advanced machine learning for 
+                    improved domain evaluation, expanded registry partnerships, and real-time market intelligence feeds. 
+                    We're also developing enhanced portfolio analytics and insights, community engagement features for 
+                    domain suggestions, and marketplace integration for domain sales.
                   </p>
-                  <ul className="ml-6 list-disc space-y-2">
-                    <li>Advanced machine learning for improved domain evaluation</li>
-                    <li>Expanded registry partnerships</li>
-                    <li>Real-time market intelligence feeds</li>
-                    <li>Enhanced portfolio analytics and insights</li>
-                    <li>Community engagement and domain suggestions</li>
-                    <li>Marketplace integration for domain sales</li>
-                  </ul>
                 </section>
               </div>
             </div>

@@ -206,16 +206,6 @@ export default function WhitepaperPage() {
                 </div>
               </section>
             </div>
-
-            <div className="mt-12 rounded-3xl bg-black/35 p-6 ring-1 ring-white/10 sm:p-8">
-              <p className="text-center text-sm text-white/60">
-                Last updated: {new Date().toLocaleDateString("en-US", { 
-                  year: "numeric", 
-                  month: "long", 
-                  day: "numeric" 
-                })}
-              </p>
-            </div>
           </div>
         </Reveal>
       </main>

@@ -23,9 +23,9 @@ function buildMockDomains(): GoDaddyDomain[] {
   // Start empty and add 2 domains per minute.
   // Reference point: fixed deployment timestamp (when this feature was pushed).
   // This ensures all visitors see domains appearing at the same time.
-  // Deployment time: 2025-12-20 13:53:00 UTC (update this when deploying)
+  // Deployment time: 2025-12-20 16:00:00 UTC (reset to start fresh)
   const now = Date.now();
-  const deploymentTime = new Date("2025-12-20T13:53:00.000Z").getTime();
+  const deploymentTime = new Date("2025-12-20T16:00:00.000Z").getTime();
   
   // Calculate minutes elapsed since deployment
   const minutesElapsed = Math.floor((now - deploymentTime) / (60 * 1000));

@@ -110,36 +110,60 @@ function buildMockDomains(): GoDaddyDomain[] {
     return arr[Math.floor(rand() * arr.length)]!;
   }
 
-  function makeLabel(i: number) {
-    const w1 = pick(a);
-    const w2 = pick(b);
-    const w3 = pick(a);
+  function makeLabel(i: number, usedLabels: Set<string>) {
+    // Use index in seed to ensure deterministic but unique generation per domain
+    const labelRand = mulberry32(hash32(`funstr:mock:${deploymentDate}:label:${i}`));
+    
+    const pickLabel = <T,>(arr: T[]) => arr[Math.floor(labelRand() * arr.length)]!;
+    
+    let attempts = 0;
+    let label: string;
+    
+    do {
+      const w1 = pickLabel(a);
+      const w2 = pickLabel(b);
+      const w3 = pickLabel(a);
 
-    // 55% single word, 40% hyphenated two-word, 5% three-part.
-    let label =
-      rand() < 0.55 ? w1 : rand() < 0.95 ? `${w1}-${w2}` : `${w1}-${w2}-${w3}`;
+      // 55% single word, 40% hyphenated two-word, 5% three-part.
+      label = labelRand() < 0.55 ? w1 : labelRand() < 0.95 ? `${w1}-${w2}` : `${w1}-${w2}-${w3}`;
 
-    // Rare numeric flair (kept low for realism).
-    if (rand() < 0.08) label = `${label}${String(10 + Math.floor(rand() * 90))}`;
+      // Rare numeric flair (kept low for realism).
+      if (labelRand() < 0.08) label = `${label}${String(10 + Math.floor(labelRand() * 90))}`;
 
-    // Ensure uniqueness if collisions happen.
-    if (i > 0 && rand() < 0.1) label = `${label}-${String(1 + Math.floor(rand() * 9))}`;
+      // Add suffix if needed for uniqueness
+      if (usedLabels.has(label)) {
+        label = `${label}-${String(1 + Math.floor(labelRand() * 9))}`;
+      }
 
-    // Keep labels reasonable length.
-    return label.slice(0, 20);
+      // Keep labels reasonable length.
+      label = label.slice(0, 20);
+      attempts++;
+    } while (usedLabels.has(label) && attempts < 10);
+    
+    // Final fallback: add index-based suffix if still duplicate
+    if (usedLabels.has(label)) {
+      label = `${label}-${i}`;
+    }
+    
+    return label;
   }
 
   const out: GoDaddyDomain[] = [];
+  const usedLabels = new Set<string>();
+  
   for (let i = 0; i < N; i++) {
     // Each pair of domains is added at the start of a minute
     // Domain 0,1 at minute 0; domain 2,3 at minute 1; etc.
     const minuteIndex = Math.floor(i / 2);
     const secondInMinute = (i % 2) * 30; // First domain at :00, second at :30
     
+    const label = makeLabel(i, usedLabels);
+    usedLabels.add(label);
+    
     const createdAt = new Date(deploymentTime + minuteIndex * 60 * 1000 + secondInMinute * 1000).toISOString();
     const expires = new Date(now + 1000 * 60 * 60 * 24 * (320 + Math.floor(rand() * 120))).toISOString();
     out.push({
-      domain: `${makeLabel(i)}.fun`,
+      domain: `${label}.fun`,
       status: "ACTIVE",
       createdAt,
       expires,

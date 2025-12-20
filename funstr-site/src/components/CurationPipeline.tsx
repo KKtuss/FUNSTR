@@ -537,9 +537,9 @@ export function CurationPipeline() {
     // Core .fun / entertainment
     ["fun", 96],
     ["play", 88],
-    ["game", 86],
-    ["games", 84],
-    ["party", 78],
+    ["game", 70], // Reduced from 86
+    ["games", 68], // Reduced from 84
+    ["party", 62], // Reduced from 78
     ["vibe", 80],
     ["laugh", 74],
     ["lol", 76],
@@ -555,7 +555,7 @@ export function CurationPipeline() {
     ["clip", 64],
     ["gif", 60],
     ["mash", 54],
-    ["quiz", 58],
+    ["quiz", 48], // Reduced from 58
     ["spin", 56],
     ["wheel", 52],
     ["luck", 54],
@@ -567,7 +567,7 @@ export function CurationPipeline() {
     ["arena", 48],
 
     // Creator / community / social
-    ["creator", 72],
+    ["creator", 82], // Increased from 72 (market-validated)
     ["crew", 52],
     ["club", 56],
     ["chat", 64],
@@ -578,8 +578,14 @@ export function CurationPipeline() {
     ["studio", 54],
     ["labs", 52],
 
+    // Market-validated keywords (real .fun sales data)
+    ["ai", 88], // Increased from 60 (highest reported sales)
+    ["strawberry", 76], // Novelty/lifestyle (premium registrations)
+    ["loop", 74], // Novelty/lifestyle (premium registrations)
+    ["instant", 72], // Novelty/lifestyle (premium registrations)
+    ["idols", 70], // Novelty/lifestyle (premium registrations)
+
     // Tech-ish but common in .fun ecosystems
-    ["ai", 60],
     ["bot", 54],
     ["agent", 50],
   ]);

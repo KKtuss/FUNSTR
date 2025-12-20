@@ -24,19 +24,38 @@ export function IntroOverlay() {
     }, 750);
   }, []);
 
-  // Show on every full page load/refresh, but never on /parked.
+  // Show only on root path "/" and only on initial page load/refresh, never on /parked or client-side navigation.
   React.useEffect(() => {
+    // Never show on /parked
     if (pathname?.startsWith("/parked")) {
       setVisible(false);
       document.body.style.overflow = "";
       return;
     }
 
-    // Don't re-show on client-side navigation; only on refresh (component remount).
-    if (didInit.current) {
+    // Only show on root path "/"
+    if (pathname !== "/") {
+      setVisible(false);
+      document.body.style.overflow = "";
       return;
     }
+
+    // Check if intro was already shown in this session
+    const introShown = typeof window !== "undefined" && sessionStorage.getItem("funstr-intro-shown") === "true";
+    
+    // Don't re-show if already shown or if component already initialized
+    if (introShown || didInit.current) {
+      setVisible(false);
+      document.body.style.overflow = "";
+      return;
+    }
+    
     didInit.current = true;
+    
+    // Mark as shown in session
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("funstr-intro-shown", "true");
+    }
 
     setVisible(true);
     setExiting(false);

@@ -44,7 +44,7 @@ export const token: TokenConfig = {
     chart: "https://example.com/chart",
     telegram: "https://t.me/example",
     x: "https://x.com/example",
-    whitepaper: "https://example.com/whitepaper",
+    whitepaper: "/whitepaper",
   },
 };
 

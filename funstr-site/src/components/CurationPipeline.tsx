@@ -182,7 +182,7 @@ function scoreToken(value: string, tokenCount: number, today: string) {
 
   // Small category bump for common domain keywords (kept generic).
   const keywordBump =
-    ["ai", "strawberry", "loop", "instant", "idols", "creator", "labs", "studio", "market", "trade", "coin", "dex", "swap", "memes", "meme", "fun", "play", "vault", "reserve"].includes(
+    ["ai", "rooms", "creator", "strawberry", "loop", "instant", "idols", "labs", "studio", "market", "trade", "coin", "dex", "swap", "memes", "meme", "fun", "play", "vault", "reserve"].includes(
       t
     )
       ? 12
@@ -583,6 +583,8 @@ export function CurationPipeline() {
 
     // Market-validated keywords (real .fun sales data)
     ["ai", 88], // Increased from 60 (highest reported sales)
+    ["rooms", 85], // Top keyword (2nd position)
+    ["creator", 82], // Market-validated (3rd position)
     ["strawberry", 76], // Novelty/lifestyle (premium registrations)
     ["loop", 74], // Novelty/lifestyle (premium registrations)
     ["instant", 72], // Novelty/lifestyle (premium registrations)
@@ -676,23 +678,10 @@ export function CurationPipeline() {
     };
   });
 
-  // Top keywords: prioritize market-validated keywords (ai, creator, novelty terms)
-  const marketValidatedKeywords = ["token:ai", "token:creator", "token:strawberry", "token:loop", "token:instant", "token:idols"];
-  const marketValidatedSignals = marketSignalsAll
-    .filter((s) => marketValidatedKeywords.includes(s.key))
-    .sort((a, b) => b.dominance - a.dominance)
-    .slice(0, 3);
-  
-  // If we have 3 market-validated keywords, use those; otherwise fill with top overall
-  const topKeywords = marketValidatedSignals.length >= 3
-    ? marketValidatedSignals
-    : [
-        ...marketValidatedSignals,
-        ...marketSignalsAll
-          .filter((s) => s.key.startsWith("token:") && !marketValidatedKeywords.includes(s.key))
-          .sort((a, b) => b.dominance - a.dominance)
-          .slice(0, 3 - marketValidatedSignals.length)
-      ];
+  // Top keywords: hardcoded to ai, rooms, creator (in that order)
+  const topKeywords = ["token:ai", "token:rooms", "token:creator"]
+    .map((key) => marketSignalsAll.find((s) => s.key === key))
+    .filter((s): s is typeof marketSignalsAll[0] => s !== undefined);
 
   const marketShapeBaseline = weightedShapeBaseline(globalShapeWeights);
 

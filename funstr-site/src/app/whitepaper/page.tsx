@@ -9,7 +9,7 @@ export default function WhitepaperPage() {
 
       <SiteHeader />
 
-      <main className="relative z-10 mx-auto w-full max-w-4xl px-4 py-10 sm:px-6 sm:py-14 lg:px-10">
+      <main className="relative z-10 mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14 lg:px-10 xl:max-w-7xl">
         <Reveal delayMs={40}>
           <article className="prose prose-invert max-w-none">
             <div className="rounded-3xl bg-black/35 p-8 ring-1 ring-white/10 sm:p-12">

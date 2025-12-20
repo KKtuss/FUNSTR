@@ -114,9 +114,17 @@ function mulberry32(seed: number) {
 }
 
 const GLOBAL_FUN_HINTS = {
-  // These are broad “market-aligned” buckets used for explanations + recommendations.
-  // Keep them broad and brand-safe.
+  // These are broad "market-aligned" buckets used for explanations + recommendations.
+  // Based on real .fun market data: AI terms, novelty/lifestyle terms, and culture-centric keywords.
   keywordTokens: new Set([
+    // AI-related (highest reported sales)
+    "ai",
+    // Novelty & lifestyle (premium registrations)
+    "strawberry",
+    "loop",
+    "instant",
+    "idols",
+    // Original .fun-native terms
     "meme",
     "creator",
     "clip",
@@ -138,7 +146,7 @@ const GLOBAL_FUN_HINTS = {
     "toon",
     "games",
   ]),
-  // Common naming suffixes on .fun (more “format” than “keyword”).
+  // Common naming suffixes on .fun (more "format" than "keyword").
   suffixTokens: new Set([
     "studio",
     "lab",
@@ -149,6 +157,8 @@ const GLOBAL_FUN_HINTS = {
     "arena",
     "bot",
   ]),
+  // Culture-centric numeric terms (meme-friendly, should be recognized despite being numeric)
+  cultureNumerics: new Set(["404", "69", "420", "1337"]),
   baseline: {
     avgLabelLen: 6.9,
     brandablePct: 33,
@@ -180,7 +190,16 @@ function scoreDomain(domain: string) {
 
   // Structure penalties.
   if (hasHyphen) score -= 8;
-  if (hasDigits) score -= 10;
+  // Check for culture-centric numerics (e.g., "404") that are meme-friendly and market-validated
+  const hasCultureNumeric = tokens.some((t) => GLOBAL_FUN_HINTS.cultureNumerics.has(t));
+  if (hasDigits) {
+    if (hasCultureNumeric) {
+      // Culture-centric numerics are acceptable (e.g., "404.fun")
+      score -= 3;
+    } else {
+      score -= 10;
+    }
+  }
 
   // “Brandable-ish”: letters-only, medium length.
   const lettersOnlyOk = lettersOnly.length === labelLen;
@@ -193,7 +212,8 @@ function scoreDomain(domain: string) {
   // Token alignment.
   const keywordHits = tokens.filter((t) => GLOBAL_FUN_HINTS.keywordTokens.has(t));
   const suffixHits = tokens.filter((t) => GLOBAL_FUN_HINTS.suffixTokens.has(t));
-  const strongHits = [...new Set([...keywordHits, ...suffixHits])];
+  const cultureNumericHits = tokens.filter((t) => GLOBAL_FUN_HINTS.cultureNumerics.has(t));
+  const strongHits = [...new Set([...keywordHits, ...suffixHits, ...cultureNumericHits])];
   if (strongHits.length > 0) score += Math.min(14, 6 + 4 * strongHits.length);
 
   score = clamp(Math.round(score), 0, 100);
@@ -207,18 +227,29 @@ function scoreDomain(domain: string) {
   if (!hasHyphen) reasons.push("No hyphen (cleaner naming structure)");
   else cautions.push("Hyphenated labels often trade thinner than single-token names");
 
-  if (!hasDigits) reasons.push("No digits (less “generated” vibe)");
-  else cautions.push("Digits can lower trust/brandability for many buyers");
+  if (!hasDigits) reasons.push('No digits (less "generated" vibe)');
+  else {
+    if (hasCultureNumeric) {
+      const cultureNumeric = tokens.find((t) => GLOBAL_FUN_HINTS.cultureNumerics.has(t));
+      reasons.push(`Culture-centric numeric (${cultureNumeric}) can resonate in meme-friendly markets`);
+    } else {
+      cautions.push("Digits can lower trust/brandability for many buyers");
+    }
+  }
 
   if (vowelPct >= 30 && vowelPct <= 60) reasons.push(`Pronounceability looks decent (vowels ~${vowelPct}%)`);
   else cautions.push(`Pronounceability may be weaker (vowels ~${vowelPct}%)`);
 
-  if (keywordHits.length || suffixHits.length) {
-    // Prefer a “pattern” phrasing if we have both a keyword and a suffix (e.g., creator + zone).
+  if (keywordHits.length || suffixHits.length || cultureNumericHits.length) {
+    // Prefer a "pattern" phrasing if we have both a keyword and a suffix (e.g., creator + zone).
     if (keywordHits.length && suffixHits.length) {
       reasons.push(`Market pattern: ${keywordHits[0]} + ${suffixHits[0]}`);
+    } else if (cultureNumericHits.length && keywordHits.length) {
+      reasons.push(`Market pattern: ${cultureNumericHits[0]} + ${keywordHits[0]}`);
     } else if (keywordHits.length) {
       reasons.push(`Common .fun market keyword(s): ${keywordHits.slice(0, 3).join(", ")}`);
+    } else if (cultureNumericHits.length) {
+      reasons.push(`Culture-centric numeric: ${cultureNumericHits[0]} (meme-friendly, market-validated)`);
     } else {
       reasons.push(`Common .fun naming suffix: ${suffixHits.slice(0, 2).join(", ")}`);
     }
@@ -338,11 +369,11 @@ function portfolioAnalysis(domains: GoDaddyDomain[], fetchedAt?: string, source?
     recs.push("Increase the share of 4–7 letter letters-only labels (brandable core).");
   }
 
-  // Always include a “what to look for next” block.
+  // Always include a "what to look for next" block.
   const targetCriteria = [
     "4–7 letters, letters-only (brandable core)",
-    "No hyphen + no digits (clean structure)",
-    "Contains a .fun-native token (creator/clip/beat/quiz/party)",
+    "AI-related terms or novelty/lifestyle keywords (strawberry/loop/instant/idols)",
+    "Culture-centric numerics (404) or .fun-native tokens (creator/clip/beat/quiz/party)",
   ];
 
   // Suggest domains deterministically from the current day + top tokens so it feels “agent-like”.

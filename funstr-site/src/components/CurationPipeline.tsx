@@ -775,8 +775,7 @@ export function CurationPipeline() {
           <div className="text-xs text-white/45">
             Reserve{" "}
             <span className="font-semibold text-white/80">{count}</span> • last
-            scan {fmtAgo(fetchedAt, nowMs)} • createdAt{" "}
-            <span className="font-semibold text-white/80">{createdCoverage}%</span>
+            scan {fmtAgo(fetchedAt, nowMs)}
           </div>
         </div>
 

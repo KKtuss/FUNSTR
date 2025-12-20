@@ -20,10 +20,21 @@ function jsonError(status: number, message: string) {
 }
 
 function buildMockDomains(): GoDaddyDomain[] {
-  // “Prop” reserve: realistic-ish .fun names + timestamps spread across days.
-  // Deterministic per UTC day so it feels random but doesn’t change every refresh.
+  // Start empty and add 2 domains per minute.
+  // Reference point: start of current UTC day.
   const now = Date.now();
   const day = new Date(now).toISOString().slice(0, 10);
+  const dayStart = new Date(`${day}T00:00:00.000Z`).getTime();
+  
+  // Calculate minutes elapsed since start of day
+  const minutesElapsed = Math.floor((now - dayStart) / (60 * 1000));
+  
+  // 2 domains per minute
+  const N = Math.max(0, minutesElapsed * 2);
+
+  if (N === 0) {
+    return [];
+  }
 
   function hash32(input: string) {
     let h = 2166136261;
@@ -115,17 +126,14 @@ function buildMockDomains(): GoDaddyDomain[] {
     return label.slice(0, 20);
   }
 
-  const N = 24;
-  const newestAgeMs =
-    (2 * 60 * 60 * 1000) + Math.floor(rand() * 6 * 60 * 60 * 1000); // 2h..8h
-
   const out: GoDaddyDomain[] = [];
   for (let i = 0; i < N; i++) {
-    // Spread across ~7 days, newest not “seconds ago”.
-    const spacingMs =
-      (4 * 60 * 60 * 1000) + Math.floor(rand() * 6 * 60 * 60 * 1000); // 4h..10h
-    const jitterMs = Math.floor(rand() * 20 * 60 * 1000); // up to 20m
-    const createdAt = new Date(now - newestAgeMs - i * spacingMs - jitterMs).toISOString();
+    // Each pair of domains is added at the start of a minute
+    // Domain 0,1 at minute 0; domain 2,3 at minute 1; etc.
+    const minuteIndex = Math.floor(i / 2);
+    const secondInMinute = (i % 2) * 30; // First domain at :00, second at :30
+    
+    const createdAt = new Date(dayStart + minuteIndex * 60 * 1000 + secondInMinute * 1000).toISOString();
     const expires = new Date(now + 1000 * 60 * 60 * 24 * (320 + Math.floor(rand() * 120))).toISOString();
     out.push({
       domain: `${makeLabel(i)}.fun`,

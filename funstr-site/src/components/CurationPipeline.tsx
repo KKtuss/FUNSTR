@@ -182,7 +182,7 @@ function scoreToken(value: string, tokenCount: number, today: string) {
 
   // Small category bump for common domain keywords (kept generic).
   const keywordBump =
-    ["ai", "labs", "studio", "games", "market", "trade", "coin", "dex", "swap", "memes", "meme", "fun", "play", "creator", "vault", "reserve"].includes(
+    ["ai", "strawberry", "loop", "instant", "idols", "creator", "labs", "studio", "market", "trade", "coin", "dex", "swap", "memes", "meme", "fun", "play", "vault", "reserve"].includes(
       t
     )
       ? 8
@@ -539,7 +539,7 @@ export function CurationPipeline() {
     ["play", 88],
     ["game", 70], // Reduced from 86
     ["games", 68], // Reduced from 84
-    ["party", 62], // Reduced from 78
+    ["party", 38], // Reduced from 78
     ["vibe", 80],
     ["laugh", 74],
     ["lol", 76],
@@ -552,10 +552,10 @@ export function CurationPipeline() {
     ["dance", 60],
     ["music", 58],
     ["beat", 56],
-    ["clip", 64],
+    ["clip", 42], // Reduced from 64
     ["gif", 60],
     ["mash", 54],
-    ["quiz", 48], // Reduced from 58
+    ["quiz", 36], // Reduced from 58
     ["spin", 56],
     ["wheel", 52],
     ["luck", 54],

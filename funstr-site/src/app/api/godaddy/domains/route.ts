@@ -20,9 +20,88 @@ function jsonError(status: number, message: string) {
 }
 
 function buildMockDomains(): GoDaddyDomain[] {
-  // Return empty for now - will be populated with a provided list of 40 domains
-  // that will be added 2 per minute over 20 minutes
-  return [];
+  // Provided list of domains to be added 2 per minute
+  const domainList = [
+    "live-ai.fun",
+    "ai-go.fun",
+    "aigallery.fun",
+    "goontech.fun",
+    "tech-web.fun",
+    "strategy26.fun",
+    "wisefund.fun",
+  ];
+
+  // Reference point: fixed deployment timestamp
+  // This ensures all visitors see domains appearing at the same time.
+  // Deployment time: 2025-12-20 16:00:00 UTC (update this when deploying)
+  const now = Date.now();
+  const deploymentTime = new Date("2025-12-20T16:00:00.000Z").getTime();
+  
+  // Calculate minutes elapsed since deployment
+  const minutesElapsed = Math.floor((now - deploymentTime) / (60 * 1000));
+  
+  // 2 domains per minute
+  const N = Math.max(0, Math.min(minutesElapsed * 2, domainList.length));
+
+  if (N === 0) {
+    return [];
+  }
+
+  function hash32(input: string) {
+    let h = 2166136261;
+    for (let i = 0; i < input.length; i++) {
+      h ^= input.charCodeAt(i);
+      h = Math.imul(h, 16777619) >>> 0;
+    }
+    return h >>> 0;
+  }
+
+  function mulberry32(seed: number) {
+    let a = seed >>> 0;
+    return () => {
+      a |= 0;
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  const deploymentDate = new Date(deploymentTime).toISOString().slice(0, 10);
+  const rand = mulberry32(hash32(`funstr:mock:${deploymentDate}`));
+
+  const out: GoDaddyDomain[] = [];
+  
+  for (let i = 0; i < N; i++) {
+    // Each pair of domains is added at the start of a minute
+    // Domain 0,1 at minute 0; domain 2,3 at minute 1; etc.
+    const minuteIndex = Math.floor(i / 2);
+    const secondInMinute = (i % 2) * 30; // First domain at :00, second at :30
+    
+    const domainName = domainList[i]!;
+    const createdAt = new Date(deploymentTime + minuteIndex * 60 * 1000 + secondInMinute * 1000).toISOString();
+    const expires = new Date(now + 1000 * 60 * 60 * 24 * (320 + Math.floor(rand() * 120))).toISOString();
+    out.push({
+      domain: domainName,
+      status: "ACTIVE",
+      createdAt,
+      expires,
+      renewalPeriod: 1,
+      privacy: rand() < 0.35,
+      autoRenew: rand() < 0.55,
+      locked: true,
+      nameServers: ["ns1.vercel-dns.com", "ns2.vercel-dns.com"],
+    });
+  }
+
+  // Sort newest first for nicer UIs
+  out.sort((x, y) => {
+    const tx = x.createdAt ? new Date(x.createdAt).getTime() : 0;
+    const ty = y.createdAt ? new Date(y.createdAt).getTime() : 0;
+    return ty - tx;
+  });
+
+  return out;
 }
 
 function priceForDomainUsd(domain: string) {

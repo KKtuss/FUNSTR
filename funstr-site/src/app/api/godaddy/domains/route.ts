@@ -21,16 +21,17 @@ function jsonError(status: number, message: string) {
 
 function buildMockDomains(): GoDaddyDomain[] {
   // Start empty and add 2 domains per minute.
-  // Reference point: start of current UTC day.
+  // Reference point: fixed deployment timestamp (when this feature was pushed).
+  // This ensures all visitors see domains appearing at the same time.
+  // Deployment time: 2025-12-20 13:53:00 UTC (update this when deploying)
   const now = Date.now();
-  const day = new Date(now).toISOString().slice(0, 10);
-  const dayStart = new Date(`${day}T00:00:00.000Z`).getTime();
+  const deploymentTime = new Date("2025-12-20T13:53:00.000Z").getTime();
   
-  // Calculate minutes elapsed since start of day
-  const minutesElapsed = Math.floor((now - dayStart) / (60 * 1000));
+  // Calculate minutes elapsed since deployment
+  const minutesElapsed = Math.floor((now - deploymentTime) / (60 * 1000));
   
-  // 2 domains per minute
-  const N = Math.max(0, minutesElapsed * 2);
+  // 2 domains per minute (capped at a reasonable max to avoid too many domains)
+  const N = Math.max(0, Math.min(minutesElapsed * 2, 1000));
 
   if (N === 0) {
     return [];
@@ -56,7 +57,9 @@ function buildMockDomains(): GoDaddyDomain[] {
     };
   }
 
-  const rand = mulberry32(hash32(`funstr:mock:${day}`));
+  // Use deployment date for deterministic randomness
+  const deploymentDate = new Date(deploymentTime).toISOString().slice(0, 10);
+  const rand = mulberry32(hash32(`funstr:mock:${deploymentDate}`));
 
   const a = [
     "meme",
@@ -133,7 +136,7 @@ function buildMockDomains(): GoDaddyDomain[] {
     const minuteIndex = Math.floor(i / 2);
     const secondInMinute = (i % 2) * 30; // First domain at :00, second at :30
     
-    const createdAt = new Date(dayStart + minuteIndex * 60 * 1000 + secondInMinute * 1000).toISOString();
+    const createdAt = new Date(deploymentTime + minuteIndex * 60 * 1000 + secondInMinute * 1000).toISOString();
     const expires = new Date(now + 1000 * 60 * 60 * 24 * (320 + Math.floor(rand() * 120))).toISOString();
     out.push({
       domain: `${makeLabel(i)}.fun`,

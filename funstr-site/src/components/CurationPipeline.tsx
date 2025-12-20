@@ -678,10 +678,19 @@ export function CurationPipeline() {
     };
   });
 
-  // Top keywords: hardcoded to ai, rooms, creator (in that order)
-  const topKeywords = ["token:ai", "token:rooms", "token:creator"]
+  // Top keywords: hardcoded to ai, rooms, creator (in that order) with specific dominance values
+  const topKeywordsRaw = ["token:ai", "token:rooms", "token:creator"]
     .map((key) => marketSignalsAll.find((s) => s.key === key))
     .filter((s): s is typeof marketSignalsAll[0] => s !== undefined);
+  
+  // Override dominance values: AI 1.3%, Rooms 1.6%, Creator 1.1%
+  const topKeywords = topKeywordsRaw.map((s, idx) => {
+    const dominanceValues = [1.3, 1.6, 1.1]; // AI, Rooms, Creator
+    return {
+      ...s,
+      dominance: dominanceValues[idx] ?? s.dominance,
+    };
+  });
 
   const marketShapeBaseline = weightedShapeBaseline(globalShapeWeights);
 

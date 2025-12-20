@@ -47,7 +47,7 @@ export function middleware(req: NextRequest) {
 // Don’t run middleware for Next internals / APIs / assets needed by the parked page
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|logo.png|logo.svg|bg.mp4).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|logo.png|logoo.png|logo.svg|bg.mp4).*)",
   ],
 };
 

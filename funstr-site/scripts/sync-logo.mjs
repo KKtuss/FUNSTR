@@ -133,9 +133,14 @@ async function main() {
 
     const ext = path.extname(src).toLowerCase();
     const dest = path.join(outDir, ext === ".svg" ? "logo.svg" : "logo.png");
+    const destLogoo = path.join(outDir, ext === ".svg" ? "logoo.svg" : "logoo.png");
 
     await fs.copyFile(src, dest);
     console.log(`[sync-logo] Copied ${src} -> ${dest}`);
+    
+    // Also copy as logoo.png for favicon
+    await fs.copyFile(src, destLogoo);
+    console.log(`[sync-logo] Copied ${src} -> ${destLogoo}`);
   }
 
   const videoSrc = await pickVideoFile();

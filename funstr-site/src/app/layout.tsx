@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     "Official site for FUNSTRATEGY ($FUNSTR): token info, links, and a live list of GoDaddy domains.",
   icons: {
     icon: [
+      { url: "/logoo.png", type: "image/png" },
       { url: "/logo.png", type: "image/png" },
       { url: "/logo.svg", type: "image/svg+xml" },
     ],

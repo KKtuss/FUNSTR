@@ -67,26 +67,37 @@ export default function WhitepaperPage() {
                 <section>
                   <h2 className="mb-6 text-2xl font-extrabold text-white sm:text-3xl">3. Automation</h2>
                   
-                  <h3 className="mb-3 mt-6 text-xl font-bold text-cyan-200">3.1 Automated Scheduling</h3>
-                  <p className="mb-3">
-                    A scheduled cron job runs daily to automatically process domain acquisitions. This ensures:
-                  </p>
-                  <ul className="mb-6 ml-6 list-disc space-y-2">
-                    <li>Consistent daily evaluation of market opportunities</li>
-                    <li>Automated execution of the curation pipeline</li>
-                    <li>Systematic portfolio growth and optimization</li>
-                    <li>Real-time updates to market analysis and statistics</li>
-                  </ul>
-
-                  <h3 className="mb-3 mt-6 text-xl font-bold text-cyan-200">3.2 Automated Domain Purchases</h3>
+                  <h3 className="mb-3 mt-6 text-xl font-bold text-cyan-200">3.1 Automated Domain Purchases</h3>
                   <p className="mb-3">
                     The system integrates with domain registrar APIs to automatically purchase high-scoring domains:
                   </p>
-                  <ul className="ml-6 list-disc space-y-2">
+                  <ul className="mb-6 ml-6 list-disc space-y-2">
                     <li>Automated search and discovery of available domains</li>
                     <li>Intelligent purchase decisions based on scoring algorithms</li>
                     <li>Portfolio management and tracking</li>
+                    <li>Real-time acquisition processing</li>
+                  </ul>
+
+                  <h3 className="mb-3 mt-6 text-xl font-bold text-cyan-200">3.2 Automated DNS Mapping</h3>
+                  <p className="mb-3">
+                    Once domains are purchased, the system automatically configures DNS settings:
+                  </p>
+                  <ul className="mb-6 ml-6 list-disc space-y-2">
                     <li>Automatic DNS configuration and setup</li>
+                    <li>Name server assignment</li>
+                    <li>Domain routing configuration</li>
+                    <li>Parked page assignment via Vercel cron jobs</li>
+                  </ul>
+
+                  <h3 className="mb-3 mt-6 text-xl font-bold text-cyan-200">3.3 Automated Owned Domain Curation</h3>
+                  <p className="mb-3">
+                    A scheduled cron job runs daily to automatically curate and analyze owned domains:
+                  </p>
+                  <ul className="ml-6 list-disc space-y-2">
+                    <li>Consistent daily evaluation of portfolio performance</li>
+                    <li>Automated execution of the curation pipeline</li>
+                    <li>Systematic portfolio analysis and optimization</li>
+                    <li>Real-time updates to market analysis and statistics</li>
                   </ul>
                 </section>
 

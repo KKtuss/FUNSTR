@@ -78,7 +78,7 @@ export default function WhitepaperPage() {
               <span className="text-cyan-200">Whitepaper</span>
             </h1>
             <p className="text-lg text-white/70 sm:text-xl">
-              Version 1.0 • {new Date().getFullYear()}
+              Version 1.1 • {new Date().getFullYear()}
             </p>
           </div>
         </Reveal>
@@ -91,15 +91,15 @@ export default function WhitepaperPage() {
             automated, AI-powered system. By combining creator fee economics
             with advanced domain analysis, FUNSTRATEGY establishes $FUNSTR as
             the leading force behind the .fun ecosystem while creating value for
-            token holders through strategic domain curation.
+            token holders through strategic domain curation and a decentralized
+            marketplace.
           </p>
           <p>
-            Our Claude-powered Domain Agent analyzes domains in real-time,
+            Our system leverages <strong>Claude AI</strong> to analyze domains in real-time,
             scoring them based on market-validated criteria including keyword
             alignment, brandability, and cultural relevance. This intelligent
             curation system ensures that the FUNSTRATEGY reserve holds the
-            strongest names in the .fun namespace, creating long-term value and
-            positioning the protocol as a cornerstone of the .fun ecosystem.
+            strongest names in the .fun namespace.
           </p>
         </Section>
 
@@ -119,194 +119,98 @@ export default function WhitepaperPage() {
             creator rewards, establishing $FUNSTR as the leading force behind
             the .fun trademark.
           </p>
-          <p>
-            Our approach combines automated domain procurement, AI-driven
-            analysis, and strategic curation to build a portfolio that captures
-            the most valuable properties in the .fun namespace.
-          </p>
         </Section>
 
-        {/* Problem Statement */}
-        <Section title="2. Market Opportunity">
+        {/* Claude AI Implementation */}
+        <Section title="2. Claude AI Implementation">
           <p>
-            The .fun domain extension has emerged as a key destination for
-            entertainment, creator, and meme-native projects. However, manual
-            domain acquisition lacks the speed, consistency, and strategic
-            insight needed to build a comprehensive reserve. Key challenges
-            include:
-          </p>
-          <ul className="ml-6 list-disc space-y-2 text-white/80">
-            <li>
-              <strong>Scalability:</strong> Manual acquisition cannot match the
-              pace needed to build a significant reserve
-            </li>
-            <li>
-              <strong>Quality Assessment:</strong> Evaluating domain value
-              requires deep understanding of market trends and cultural
-              relevance
-            </li>
-            <li>
-              <strong>Strategic Positioning:</strong> Building a reserve that
-              captures market value requires systematic analysis and
-              data-driven decisions
-            </li>
-            <li>
-              <strong>Resource Efficiency:</strong> Optimizing acquisition
-              spending requires intelligent prioritization
-            </li>
-          </ul>
-        </Section>
-
-        {/* Solution */}
-        <Section title="3. The FUNSTRATEGY Solution">
-          <p>
-            FUNSTRATEGY solves these challenges through an integrated system of
-            automated domain acquisition, AI-powered analysis, and strategic
-            curation. Our solution consists of four core components:
+            At the core of FUNSTRATEGY is the <strong>Oracle Agent</strong>, powered by Anthropic's Claude 3.5 Sonnet. This sophisticated AI implementation goes beyond simple keyword matching to perform deep semantic analysis of potential domain acquisitions.
           </p>
 
-          <SubSection title="3.1 Automated Domain Acquisition">
+          <SubSection title="2.1 The Analysis Pipeline">
             <p>
-              Our system automatically procures .fun domains at a rate of two
-              domains per minute, funded by creator fees. This automated
-              approach ensures consistent growth of the FUNSTRATEGY reserve
-              without manual intervention.
-            </p>
-          </SubSection>
-
-          <SubSection title="3.2 Domain Routing & Infrastructure">
-            <p>
-              Each acquired domain is immediately routed to a centralized parked
-              page, creating a unified brand presence while maintaining
-              individual domain identity. This infrastructure scales seamlessly
-              as the reserve grows.
-            </p>
-          </SubSection>
-
-          <SubSection title="3.3 Claude Domain Agent">
-            <p>
-              Our Claude-powered Domain Agent provides real-time analysis of
-              each domain in the reserve. The agent evaluates domains using a
-              comprehensive scoring system that considers:
+              When a new domain enters the ecosystem, the Claude API is triggered to perform a multi-dimensional evaluation:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>
-                <strong>Market Keywords:</strong> Alignment with high-value
-                .fun market terms (AI, creator, meme, etc.)
+                <strong>Semantic Understanding:</strong> Claude analyzes the domain name to understand its meaning, wordplay, and cultural context. It can detect puns, meme references, and "slang" that traditional algorithms miss.
               </li>
               <li>
-                <strong>Brandability:</strong> Length, pronounceability, and
-                structural quality
+                <strong>Market Validation:</strong> The AI cross-references the domain against current crypto and social media trends to determine its "virality potential."
               </li>
               <li>
-                <strong>Cultural Relevance:</strong> Recognition of
-                meme-friendly patterns and culture-centric numerics
-              </li>
-              <li>
-                <strong>Portfolio Analysis:</strong> Strategic positioning
-                within the overall reserve
+                <strong>Brandability Scoring:</strong> A proprietary prompt structure guides Claude to score domains on pronounceability, memorability, and length, generating a final "Strategy Score" (0-100).
               </li>
             </ul>
-            <p className="mt-4">
-              The Claude Domain Agent generates detailed explanations for each
-              domain, providing insights into why specific domains are strong
-              additions to the reserve. This transparency enables stakeholders
-              to understand the strategic value of our curation decisions.
-            </p>
           </SubSection>
 
-          <SubSection title="3.4 Strategic Reserve Growth">
+          <SubSection title="2.2 Automated Decision Making">
             <p>
-              The Claude Domain Agent tracks domain performance and guides
-              future acquisition strategy. By analyzing what performs well, the
-              system continuously improves its curation criteria, ensuring that
-              the reserve focuses on the most valuable domains in the .fun
-              ecosystem.
+              The Oracle Agent operates autonomously. Domains that pass a rigorous score threshold (typically 85+) are flagged for immediate acquisition or "High Priority" status. This removes human emotional bias and ensures the reserve is built on data-driven quality.
             </p>
           </SubSection>
         </Section>
 
-        {/* Technology - Claude Agent */}
-        <Section title="4. Claude Domain Agent Architecture">
+        {/* The Marketplace */}
+        <Section title="3. The Domains Marketplace">
           <p>
-            The Claude Domain Agent is the intelligent core of FUNSTRATEGY's
-            domain curation system. Built on Anthropic's Claude AI, the agent
-            provides sophisticated analysis and strategic guidance.
+            The FUNSTRATEGY Marketplace is the primary interface for users to access the protocol's reserve. It transforms the project from a passive holding company into an active economic engine.
           </p>
 
-          <SubSection title="4.1 Domain Scoring System">
+          <SubSection title="3.1 Purchasing Mechanism">
             <p>
-              Each domain receives a score from 0-100 based on multiple
-              factors:
+              All domains in the FUNSTRATEGY Reserve are available for purchase exclusively using <strong>$FUNSTR tokens</strong>. This creates a direct utility loop:
+            </p>
+            <ul className="ml-6 list-disc space-y-2">
+              <li>Users browse the curated list of high-quality .fun domains.</li>
+              <li>Prices are denominated in USD but settled in $FUNSTR at the current market rate.</li>
+              <li>Smart contracts handle the secure transfer of tokens and domain ownership rights (via DNS record configuration).</li>
+            </ul>
+          </SubSection>
+
+          <SubSection title="3.2 Instant Utility">
+            <p>
+              Upon purchase, users can immediately configure DNS records (A Records, CNAMEs) directly through the dApp interface. This "Buy & Connect" feature streamlines the process of launching a new meme coin website, creator portfolio, or community hub on a premium .fun domain.
+            </p>
+          </SubSection>
+        </Section>
+
+        {/* Fund Management */}
+        <Section title="4. Fund Management & Treasury">
+          <p>
+            The sustainability of the FUNSTRATEGY protocol relies on prudent management of two capital streams: <strong>Creator Fees</strong> (taxes) and <strong>Marketplace Sales</strong>.
+          </p>
+
+          <SubSection title="4.1 Reinvestment Loop">
+            <p>
+              Funds generated from domain sales are primarily reinvested into the protocol to accelerate growth:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>
-                <strong>Length Optimization:</strong> Prefers domains between
-                4-8 characters, with optimal brandability
+                <strong>Acquisition:</strong> 50% of sales revenue is routed back to the Acquisition Bot to purchase more domains, constantly replenishing the reserve with fresh inventory.
               </li>
               <li>
-                <strong>Token Analysis:</strong> Identifies market-validated
-                keywords with proven value in .fun sales data
-              </li>
-              <li>
-                <strong>Structural Quality:</strong> Evaluates hyphens, digits,
-                and letter composition
-              </li>
-              <li>
-                <strong>Pronounceability:</strong> Analyzes vowel distribution
-                for optimal brandability
-              </li>
-              <li>
-                <strong>Market Patterns:</strong> Recognizes successful patterns
-                like "keyword + suffix" combinations
+                <strong>Renewals:</strong> A portion of the treasury is ring-fenced to cover annual renewal fees for premium domains, ensuring the asset backing of the token remains secure.
               </li>
             </ul>
           </SubSection>
 
-          <SubSection title="4.2 Real-Time Analysis">
+          <SubSection title="4.2 Deflationary Pressure (Buybacks)">
             <p>
-              The agent provides real-time analysis of domains in the reserve,
-              generating explanations that include:
+              The remaining revenue from Marketplace sales is used to buy back $FUNSTR tokens from the open market. These tokens are either:
             </p>
             <ul className="ml-6 list-disc space-y-2">
-              <li>Strength indicators (reasons for high scores)</li>
-              <li>Cautions (potential weaknesses)</li>
-              <li>Market alignment factors</li>
-              <li>Strategic positioning within the portfolio</li>
+              <li><strong>Burned:</strong> Permanently removed from supply to increase scarcity.</li>
+              <li><strong>Rewards:</strong> Distributed to long-term holders or DAO participants (future governance feature).</li>
             </ul>
-          </SubSection>
-
-          <SubSection title="4.3 Portfolio-Level Intelligence">
-            <p>
-              Beyond individual domain analysis, the Claude Domain Agent
-              provides portfolio-level insights:
-            </p>
-            <ul className="ml-6 list-disc space-y-2">
-              <li>Overall reserve composition and quality metrics</li>
-              <li>Trend identification and pattern recognition</li>
-              <li>Recommendations for strategic focus areas</li>
-              <li>Suggested domains for future acquisition</li>
-            </ul>
-          </SubSection>
-
-          <SubSection title="4.4 Continuous Learning">
-            <p>
-              The system incorporates market data and performance metrics to
-              continuously refine its analysis criteria. As the .fun ecosystem
-              evolves, the Claude Domain Agent adapts its evaluation framework
-              to maintain relevance and strategic value.
+            <p className="mt-2">
+              This mechanism ensures that every domain sale directly benefits the token price and holder value.
             </p>
           </SubSection>
         </Section>
 
         {/* Tokenomics */}
         <Section title="5. Tokenomics">
-          <p>
-            $FUNSTR is the native token of the FUNSTRATEGY protocol. Token
-            economics are designed to align incentives between domain
-            acquisition, reserve growth, and stakeholder value.
-          </p>
-
           <SubSection title="5.1 Token Details">
             <ul className="ml-6 list-disc space-y-2">
               <li>
@@ -316,56 +220,41 @@ export default function WhitepaperPage() {
                 <strong>Total Supply:</strong> {token.totalSupply} tokens
               </li>
               <li>
-                <strong>Decimals:</strong> {token.decimals}
-              </li>
-              <li>
                 <strong>Chain:</strong> {token.chain}
               </li>
             </ul>
           </SubSection>
 
-          <SubSection title="5.2 Economics">
+          <SubSection title="5.2 The Flywheel">
             <p>
-              Creator fees fund domain acquisition, creating a self-sustaining
-              loop where protocol growth drives reserve expansion. The Claude
-              Domain Agent ensures efficient allocation of resources by
-              prioritizing high-value domains.
-            </p>
-            <p className="mt-4">
-              <strong>Token Utility:</strong> $FUNSTR serves as the exclusive currency
-              for purchasing domains from the FUNSTRATEGY reserve. This creates
-              organic demand for the token as the quality and value of the domain
-              portfolio increases.
+              1. <strong>Volume</strong> generates Creator Fees → 2. <strong>Fees</strong> fund Domain Acquisition → 3. <strong>High-Value Domains</strong> populate the Marketplace → 4. <strong>Sales</strong> require $FUNSTR (Demand) → 5. <strong>Revenue</strong> drives Buybacks (Price Support) → 6. Higher Price drives Volume.
             </p>
           </SubSection>
         </Section>
 
         {/* Roadmap */}
         <Section title="6. Roadmap">
-          <SubSection title="Phase 1: Foundation">
+          <SubSection title="Phase 1: Foundation (Completed)">
             <ul className="ml-6 list-disc space-y-2">
               <li>Launch automated domain acquisition system</li>
               <li>Deploy Claude Domain Agent for analysis</li>
               <li>Build initial reserve portfolio</li>
-              <li>Establish domain routing infrastructure</li>
             </ul>
           </SubSection>
 
-          <SubSection title="Phase 2: Scale">
+          <SubSection title="Phase 2: The Marketplace (Current)">
             <ul className="ml-6 list-disc space-y-2">
-              <li>Expand reserve to target size</li>
-              <li>Enhance Claude Domain Agent capabilities</li>
-              <li>Implement advanced portfolio analytics</li>
-              <li>Develop strategic partnerships</li>
+              <li>Launch decentralized Domains Marketplace</li>
+              <li>Enable $FUNSTR payments for domains</li>
+              <li>Implement "Buy & Connect" DNS features</li>
             </ul>
           </SubSection>
 
-          <SubSection title="Phase 3: Ecosystem">
+          <SubSection title="Phase 3: Expansion">
             <ul className="ml-6 list-disc space-y-2">
-              <li>Establish FUNSTRATEGY as .fun ecosystem leader</li>
-              <li>Launch additional value-generating mechanisms</li>
-              <li>Expand AI agent capabilities to new use cases</li>
-              <li>Create sustainable long-term value for holders</li>
+              <li>Implement DAO governance for high-value domain sales</li>
+              <li>Cross-chain domain bridging</li>
+              <li>Partnerships with major meme coin communities</li>
             </ul>
           </SubSection>
         </Section>
@@ -376,18 +265,10 @@ export default function WhitepaperPage() {
             FUNSTRATEGY represents a new approach to domain strategy, combining
             automation, artificial intelligence, and strategic curation to build
             value in the .fun ecosystem. Our Claude-powered Domain Agent ensures
-            that every domain in the reserve is carefully evaluated and
-            strategically positioned.
+            that every domain in the reserve is carefully evaluated, while our Marketplace ensures these assets remain liquid and accessible.
           </p>
           <p>
-            By establishing $FUNSTR as the leading force behind the .fun
-            trademark, we create long-term value for token holders while
-            contributing to the growth and maturation of the .fun ecosystem.
-          </p>
-          <p>
-            As the .fun namespace continues to evolve, FUNSTRATEGY's intelligent
-            curation system positions the protocol to capture and maintain
-            strategic value in this emerging digital frontier.
+            By establishing $FUNSTR as the currency of the .fun namespace, we create a robust economic model where digital real estate backs the value of the token.
           </p>
         </Section>
 

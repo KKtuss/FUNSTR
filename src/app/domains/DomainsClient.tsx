@@ -14,6 +14,7 @@ import {
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 import { Button } from "@/components/ui/Button";
+import { ConnectWalletButton } from "@/components/ConnectWalletButton";
 import { token } from "@/lib/token";
 
 // Treasury wallet that receives the FUNSTR tokens
@@ -411,6 +412,7 @@ export function DomainsClient() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          <ConnectWalletButton />
           <Button 
             variant="secondary" 
             onClick={() => void load(true)}

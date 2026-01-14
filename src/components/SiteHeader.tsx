@@ -25,7 +25,6 @@ export function SiteHeader() {
 
           <div className="flex items-center gap-4 sm:gap-6">
             <HeaderNav />
-            <ConnectWalletButton />
           </div>
         </div>
       </div>

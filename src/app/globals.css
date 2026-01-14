@@ -70,3 +70,31 @@ body {
 ::selection {
   background: color-mix(in oklab, var(--foreground) 15%, transparent);
 }
+
+/* Override Solana Wallet Adapter Button to be Blue/Cyan */
+.wallet-adapter-button {
+  background-color: transparent !important;
+  background-image: linear-gradient(to right, #06b6d4, #2563eb) !important; /* cyan-500 -> blue-600 */
+  transition: all 0.3s ease !important;
+  font-family: var(--font-sans) !important;
+  font-weight: 600 !important;
+}
+
+.wallet-adapter-button:not([disabled]):hover {
+  background-image: linear-gradient(to right, #22d3ee, #3b82f6) !important; /* cyan-400 -> blue-500 */
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+.wallet-adapter-modal-wrapper {
+  background: #0a0a0a !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.wallet-adapter-modal-button-close {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.wallet-adapter-modal-title {
+  color: white !important;
+}

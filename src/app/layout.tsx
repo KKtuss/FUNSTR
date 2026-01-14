@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "FUNSTRATEGY ($FUNSTR)",
   description:
-    "Official site for FUNSTRATEGY ($FUNSTR): token info, links, and a live list of GoDaddy domains.",
+    "Ever wanted to be apart of the (.)FUN ? FUNSTRATEGY got you covered.",
   icons: {
     icon: [
       { url: "/logoo.png", type: "image/png" },

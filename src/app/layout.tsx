@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FUNSTRATEGY ($FUNSTR)",
+  title: "FUNSTRATEGY",
   description:
     "Ever wanted to be apart of the (.)FUN ? FUNSTRATEGY got you covered.",
   icons: {

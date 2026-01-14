@@ -19,6 +19,11 @@ export function middleware(req: NextRequest) {
   // Always allow the default Vercel domain to show the main site.
   const isVercelDomain = hostname.endsWith(".vercel.app");
 
+  // If no primary host is configured, allow everything (disable parked logic)
+  if (!primaryHost && !primaryHostsCsv) {
+    return NextResponse.next();
+  }
+
   const allowed = new Set<string>();
   for (const h of primaryHostsCsv.split(",").map((s) => s.trim()).filter(Boolean)) {
     allowed.add(h);

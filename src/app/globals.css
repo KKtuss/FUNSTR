@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
+    Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* Prevent horizontal scroll from off-screen decorative/absolute elements on mobile */
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* Portrait phones: slightly reduce overall scale so content fits without feeling oversized */
+@media (max-width: 420px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Title gradient with fallback: avoids invisible text on browsers that don't support text background-clip */
+.funstr-title {
+  color: rgba(165, 243, 252, 1); /* cyan-200 fallback */
+  text-shadow: 0 0 14px rgba(56, 189, 248, 0.28);
+}
+
+@media (min-width: 640px) {
+  .funstr-title {
+    text-shadow: 0 0 18px rgba(56, 189, 248, 0.32);
+  }
+}
+
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .funstr-title {
+    background: linear-gradient(
+      90deg,
+      rgba(165, 243, 252, 1),
+      rgba(125, 211, 252, 1),
+      rgba(199, 210, 254, 1)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Slightly nicer defaults */
+::selection {
+  background: color-mix(in oklab, var(--foreground) 15%, transparent);
+}

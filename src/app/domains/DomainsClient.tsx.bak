@@ -1,0 +1,373 @@
+"use client";
+
+import * as React from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { 
+  PublicKey, 
+  Transaction, 
+  TransactionInstruction, 
+  SystemProgram, 
+  SYSVAR_RENT_PUBKEY 
+} from "@solana/web3.js";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+
+import { Button } from "@/components/ui/Button";
+import { token } from "@/lib/token";
+
+// Treasury wallet that receives the FUNSTR tokens
+// Replace with your actual Solana Treasury Public Key
+const TREASURY_PUBKEY = new PublicKey("11111111111111111111111111111111"); 
+
+const TOKEN_PROGRAM_ID = new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
+const ASSOCIATED_TOKEN_PROGRAM_ID = new PublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL");
+
+// Inline helper to find Associated Token Account (ATA) address
+async function findAssociatedTokenAddress(
+  mint: PublicKey,
+  owner: PublicKey
+): Promise<PublicKey> {
+  const [address] = await PublicKey.findProgramAddress(
+    [owner.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), mint.toBuffer()],
+    ASSOCIATED_TOKEN_PROGRAM_ID
+  );
+  return address;
+}
+
+// Inline helper to create SPL Token Transfer instruction (Layout: [3, amount_u64])
+function createSplTransferInstruction(
+  source: PublicKey,
+  destination: PublicKey,
+  owner: PublicKey,
+  amount: bigint
+): TransactionInstruction {
+  // Transfer instruction index is 3
+  // Layout: instruction (1 byte) + amount (8 bytes)
+  const data = Buffer.alloc(9);
+  data.writeUInt8(3, 0);
+  // Write BigInt as 64-bit little-endian
+  data.writeBigUInt64LE(amount, 1);
+
+  return new TransactionInstruction({
+    keys: [
+      { pubkey: source, isSigner: false, isWritable: true },
+      { pubkey: destination, isSigner: false, isWritable: true },
+      { pubkey: owner, isSigner: true, isWritable: false },
+    ],
+    programId: TOKEN_PROGRAM_ID,
+    data,
+  });
+}
+
+type DomainRow = {
+  domain: string;
+  status?: string;
+  createdAt?: string;
+  expires?: string;
+  privacy?: boolean;
+  autoRenew?: boolean;
+  locked?: boolean;
+  priceUsd?: number;
+};
+
+type ApiResponse =
+  | {
+      domains: DomainRow[];
+      fetchedAt: string;
+    }
+  | { error: string; status?: number };
+
+function fmtDate(iso?: string) {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "—";
+  return new Intl.DateTimeFormat(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  }).format(d);
+}
+
+function fmtFunstr(usdPrice?: number) {
+  if (typeof usdPrice !== "number" || Number.isNaN(usdPrice)) return "—";
+  // Conversion: $1 = 100 FUNSTR
+  const amount = Math.round(usdPrice * 100);
+  return amount.toLocaleString();
+}
+
+function cn(...parts: Array<string | undefined | false>) {
+  return parts.filter(Boolean).join(" ");
+}
+
+function BuyButton({ priceUsd, domain }: { priceUsd?: number; domain: string }) {
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction, connected } = useWallet();
+  const [status, setStatus] = React.useState<"idle" | "pending" | "success" | "error">("idle");
+
+  const funstrAmount = priceUsd ? Math.round(priceUsd * 100) : 0;
+
+  const handleBuy = async () => {
+    if (!publicKey || !funstrAmount) return;
+
+    try {
+      setStatus("pending");
+
+      // 1. Get the Mint Address
+      const mintAddress = new PublicKey(token.contractAddress || "11111111111111111111111111111111");
+
+      // 2. Get Source ATA (User's token account)
+      const sourceAta = await findAssociatedTokenAddress(mintAddress, publicKey);
+
+      // 3. Get Destination ATA (Treasury's token account)
+      const destAta = await findAssociatedTokenAddress(mintAddress, TREASURY_PUBKEY);
+
+      // 4. Create Transfer Instruction
+      // Note: This assumes 6 decimals for FUNSTR.
+      const decimals = 6; 
+      const rawAmount = BigInt(funstrAmount) * BigInt(10 ** decimals);
+
+      const instruction = createSplTransferInstruction(
+        sourceAta,
+        destAta,
+        publicKey,
+        rawAmount
+      );
+
+      // 5. Build and Send Transaction
+      const transaction = new Transaction().add(instruction);
+      
+      const signature = await sendTransaction(transaction, connection);
+      
+      await connection.confirmTransaction(signature, "confirmed");
+      
+      setStatus("success");
+    } catch (e) {
+      console.error("Transfer failed:", e);
+      setStatus("error");
+    } finally {
+      if (status !== "success") {
+        setTimeout(() => setStatus("idle"), 3000);
+      }
+    }
+  };
+
+  if (!connected) {
+    return (
+        <span className="text-xs text-white/40">Connect Wallet</span>
+    );
+  }
+
+  if (status === "success") {
+    return (
+      <span className="inline-flex items-center rounded-full bg-green-500/10 px-2 py-1 text-xs font-bold text-green-400 ring-1 ring-green-500/20">
+        Owned
+      </span>
+    );
+  }
+
+  if (status === "pending") {
+    return (
+      <Button variant="secondary" className="h-8 px-3 text-xs opacity-70 cursor-not-allowed" disabled>
+        Processing...
+      </Button>
+    );
+  }
+
+  return (
+    <Button
+      variant="primary"
+      className="h-8 px-3 text-xs"
+      onClick={handleBuy}
+      disabled={!funstrAmount}
+    >
+      Buy
+    </Button>
+  );
+}
+
+export function DomainsClient() {
+  const [data, setData] = React.useState<ApiResponse | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [query, setQuery] = React.useState("");
+  const [onlyAutoRenew, setOnlyAutoRenew] = React.useState(false);
+  const [onlyPrivacy, setOnlyPrivacy] = React.useState(false);
+
+  const parentRef = React.useRef<HTMLDivElement | null>(null);
+
+  async function load(refresh = false) {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `/api/godaddy/domains${refresh ? "?refresh=1" : ""}`,
+        { cache: "no-store" }
+      );
+      const json = (await res.json()) as ApiResponse;
+      setData(json);
+    } catch {
+      setData({ error: "Failed to load domains." });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  React.useEffect(() => {
+    void load(false);
+  }, []);
+
+  const rows = React.useMemo(() => {
+    if (!data || "error" in data) return [];
+    const q = query.trim().toLowerCase();
+    return data.domains
+      .filter((d) => (q ? d.domain.toLowerCase().includes(q) : true))
+      .filter((d) => (onlyAutoRenew ? d.autoRenew === true : true))
+      .filter((d) => (onlyPrivacy ? d.privacy === true : true))
+      .sort((a, b) => a.domain.localeCompare(b.domain));
+  }, [data, query, onlyAutoRenew, onlyPrivacy]);
+
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 60,
+    overscan: 14,
+  });
+
+  return (
+    <div className="rounded-3xl bg-black/35 ring-1 ring-white/10">
+      <div className="flex flex-col gap-3 border-b border-white/10 p-4 sm:p-6 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <div className="text-sm font-extrabold text-white sm:text-base">Marketplace</div>
+          <div className="mt-1 text-sm text-white/60 sm:text-base">
+            {loading
+              ? "Loading reserve..."
+              : data && "error" in data
+                ? "Unable to load domains"
+                : `${rows.length.toLocaleString()} domains available`}
+            {data && !("error" in data) && data.fetchedAt ? (
+              <span className="text-white/35">
+                {" "}
+                • synced {fmtDate(data.fetchedAt)}
+              </span>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="secondary" onClick={() => void load(true)}>
+            Refresh List
+          </Button>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-3 border-b border-white/10 p-4 sm:gap-4 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="w-full sm:max-w-md">
+            <div className="text-xs font-semibold tracking-wide text-white/50 sm:text-sm">
+              Search
+            </div>
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Find a domain..."
+              className="mt-2 w-full rounded-2xl bg-black/30 px-4 py-3 text-sm text-white placeholder:text-white/30 ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-white/25 sm:px-5 sm:py-4 sm:text-base"
+            />
+          </div>
+
+          <div className="flex gap-4 sm:mt-7">
+            <label className="inline-flex items-center gap-2 rounded-2xl bg-black/30 px-4 py-3 text-sm font-semibold text-white/75 ring-1 ring-white/10 hover:bg-black/25">
+              <input
+                type="checkbox"
+                checked={onlyAutoRenew}
+                onChange={(e) => setOnlyAutoRenew(e.target.checked)}
+                className="h-4 w-4 accent-white"
+              />
+              Premium
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-6 gap-0 border-b border-white/10 px-4 py-3 text-xs font-semibold tracking-wide text-white/50 sm:px-6 sm:py-4 sm:text-sm sm:grid-cols-12">
+        <div className="col-span-3 sm:col-span-5">Domain</div>
+        <div className="hidden sm:col-span-2 sm:block">Status</div>
+        <div className="hidden sm:col-span-2 sm:block">Created</div>
+        <div className="col-span-2 text-right sm:col-span-2">Price ($FUNSTR)</div>
+        <div className="col-span-1 text-right sm:col-span-1">Action</div>
+      </div>
+
+      <div
+        ref={parentRef}
+        className="relative h-[60vh] overflow-auto sm:h-[70vh]"
+        role="region"
+        aria-label="Domains list"
+      >
+        {loading ? (
+          <div className="p-4 text-sm text-white/60 sm:p-6 sm:text-base">
+            Loading marketplace data…
+          </div>
+        ) : data && "error" in data ? (
+          <div className="p-4 text-sm text-white/70 sm:p-6 sm:text-base">
+            <div className="font-semibold text-white">Unable to load domains.</div>
+            <div className="mt-2 text-white/60">
+              Please try again later.
+              {typeof data.status === "number" ? (
+                <span className="text-white/45"> (HTTP {data.status})</span>
+              ) : null}
+            </div>
+          </div>
+        ) : rows.length === 0 ? (
+          <div className="p-4 text-sm text-white/60 sm:p-6 sm:text-base">
+            No matches found.
+          </div>
+        ) : (
+          <div style={{ height: `${rowVirtualizer.getTotalSize()}px` }} className="relative">
+            {rowVirtualizer.getVirtualItems().map((v) => {
+              const d = rows[v.index];
+
+              return (
+                <div
+                  key={v.key}
+                  className={cn(
+                    "absolute left-0 right-0 grid grid-cols-6 items-center gap-0 border-b border-white/5 px-4 text-sm sm:px-6 sm:text-base sm:grid-cols-12",
+                    v.index % 2 === 0 ? "bg-white/[0.02]" : "bg-transparent"
+                  )}
+                  style={{
+                    transform: `translateY(${v.start}px)`,
+                    height: `${v.size}px`,
+                  }}
+                >
+                  <a
+                    className="col-span-3 truncate font-semibold text-white/90 hover:underline sm:col-span-5"
+                    href={`https://${d.domain}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={d.domain}
+                  >
+                    {d.domain || "—"}
+                  </a>
+                  <div className="hidden sm:col-span-2 sm:block text-white/70">
+                    <span className="inline-flex items-center rounded-full bg-emerald-400/10 px-2 py-0.5 text-xs font-medium text-emerald-400 ring-1 ring-inset ring-emerald-400/20">
+                      Available
+                    </span>
+                  </div>
+                  <div className="hidden sm:col-span-2 sm:block text-white/70">
+                    {fmtDate(d.createdAt)}
+                  </div>
+                  <div className="col-span-2 text-right font-mono text-[13px] font-bold text-cyan-200 sm:col-span-2">
+                    {fmtFunstr(d.priceUsd)}
+                  </div>
+                  <div className="col-span-1 flex justify-end sm:col-span-1">
+                    <BuyButton priceUsd={d.priceUsd} domain={d.domain} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-white/10 p-4 text-xs text-white/45 sm:p-6 sm:text-sm">
+        Prices are estimated based on current market rates. Transactions require $FUNSTR tokens on Solana.
+      </div>
+    </div>
+  );
+}

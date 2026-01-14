@@ -7,11 +7,8 @@ import {
   PublicKey, 
   Transaction, 
   TransactionInstruction, 
-  SystemProgram, 
-  SYSVAR_RENT_PUBKEY,
   ComputeBudgetProgram
 } from "@solana/web3.js";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 import { Button } from "@/components/ui/Button";
 import { ConnectWalletButton } from "@/components/ConnectWalletButton";
@@ -36,7 +33,6 @@ async function findAssociatedTokenAddress(
 }
 
 // Inline helper to create SPL Token TransferChecked instruction
-// Layout: [12, amount_u64, decimals_u8]
 function createSplTransferCheckedInstruction(
   source: PublicKey,
   mint: PublicKey,
@@ -92,12 +88,6 @@ function fmtDate(iso?: string) {
   }).format(d);
 }
 
-function fmtFunstr(usdPrice?: number) {
-  if (typeof usdPrice !== "number" || Number.isNaN(usdPrice)) return "—";
-  const amount = Math.round(usdPrice * 100);
-  return amount.toLocaleString();
-}
-
 function cn(...parts: Array<string | undefined | false>) {
   return parts.filter(Boolean).join(" ");
 }
@@ -108,13 +98,13 @@ function ConnectModal({
   isOpen,
   onClose,
   domain,
-  priceUsd,
+  funstrAmount,
   onConfirm,
 }: {
   isOpen: boolean;
   onClose: () => void;
   domain: string;
-  priceUsd?: number;
+  funstrAmount: number;
   onConfirm: () => void;
 }) {
   const [aRecord, setARecord] = React.useState("");
@@ -134,13 +124,12 @@ function ConnectModal({
 
   if (!isOpen) return null;
 
-  const funstrPrice = priceUsd ? Math.round(priceUsd * 100).toLocaleString() : "0";
+  const displayPrice = funstrAmount.toLocaleString();
 
   const handleConfirm = () => {
     setError("");
 
     // Validation
-    // Simple IPv4 regex
     const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
     
     if (!aRecord.trim()) {
@@ -223,7 +212,7 @@ function ConnectModal({
             onClick={handleConfirm}
             className="flex-1 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-3 text-sm font-bold text-white shadow-[0_0_20px_-5px_rgba(6,182,212,0.5)] hover:from-cyan-400 hover:to-blue-500 hover:shadow-[0_0_25px_-5px_rgba(6,182,212,0.6)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Buy & Connect ({funstrPrice} FUNSTR)
+            Buy & Connect ({displayPrice} FUNSTR)
           </button>
         </div>
       </div>
@@ -240,6 +229,32 @@ export function DomainsClient() {
   const [query, setQuery] = React.useState("");
   const [onlyAutoRenew, setOnlyAutoRenew] = React.useState(false);
   const [onlyPrivacy, setOnlyPrivacy] = React.useState(false);
+
+  // Price State
+  const [tokenPrice, setTokenPrice] = React.useState<number>(0.01); // Fallback $0.01
+
+  // Fetch FUNSTR Price
+  React.useEffect(() => {
+    // Skip fetch if placeholder address
+    if (token.contractAddress === "11111111111111111111111111111111") return;
+
+    fetch(`https://api.dexscreener.com/latest/dex/tokens/${token.contractAddress}`)
+      .then(r => r.json())
+      .then(data => {
+        const price = data.pairs?.[0]?.priceUsd;
+        if (price) {
+          console.log("Fetched FUNSTR Price:", price);
+          setTokenPrice(parseFloat(price));
+        }
+      })
+      .catch(err => console.error("Failed to fetch price:", err));
+  }, []);
+
+  // Helper to calculate FUNSTR amount from USD
+  const getFunstrAmount = React.useCallback((usd: number) => {
+    if (tokenPrice <= 0) return 0;
+    return Math.ceil(usd / tokenPrice);
+  }, [tokenPrice]);
 
   // Modal State
   const [selectedDomain, setSelectedDomain] = React.useState<DomainRow | null>(null);
@@ -281,7 +296,7 @@ export function DomainsClient() {
 
     try {
       const priceUsd = selectedDomain.priceUsd ?? 0;
-      const funstrAmount = Math.round(priceUsd * 100);
+      const funstrAmount = getFunstrAmount(priceUsd);
       
       const mintAddress = new PublicKey(token.contractAddress || "11111111111111111111111111111111");
       const sourceAta = await findAssociatedTokenAddress(mintAddress, publicKey);
@@ -327,7 +342,6 @@ export function DomainsClient() {
       
       setTxStatus("success");
       
-      // Reset after success (or update local state to show 'owned')
       setTimeout(() => setTxStatus("idle"), 3000);
 
     } catch (e) {
@@ -387,7 +401,7 @@ export function DomainsClient() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         domain={selectedDomain?.domain ?? ""}
-        priceUsd={selectedDomain?.priceUsd}
+        funstrAmount={selectedDomain?.priceUsd ? getFunstrAmount(selectedDomain.priceUsd) : 0}
         onConfirm={handleConfirmBuy}
       />
       
@@ -525,7 +539,7 @@ export function DomainsClient() {
                     {fmtDate(d.createdAt)}
                   </div>
                   <div className="col-span-2 text-right font-mono text-[13px] font-bold text-cyan-200 sm:col-span-2">
-                    {fmtFunstr(d.priceUsd)}
+                    {d.priceUsd ? getFunstrAmount(d.priceUsd).toLocaleString() : "—"}
                   </div>
                   <div className="col-span-1 flex justify-end sm:col-span-1">
                     {!connected ? (
@@ -549,7 +563,7 @@ export function DomainsClient() {
       </div>
 
       <div className="relative z-10 border-t border-white/10 p-4 text-xs text-white/30 sm:p-6 sm:text-sm bg-black/20 backdrop-blur-md">
-        Prices are estimated based on current market rates. Transactions require $FUNSTR tokens on Solana.
+        Prices are estimated based on current market rates ($0.01 USD/FUNSTR fallback). Transactions require $FUNSTR tokens on Solana.
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ export const config = {
   ],
 };
 
-export default function middleware(req: NextRequest) {
+export function middleware(req: NextRequest) {
   const url = req.nextUrl;
   
   // Get hostname (e.g. 'funstrategy.com' or 'funstr.vercel.app')

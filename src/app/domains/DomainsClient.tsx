@@ -118,16 +118,16 @@ function ConnectModal({
   onConfirm: () => void;
 }) {
   const [aRecord, setARecord] = React.useState("");
-  const [cname, setCname] = React.useState("www");
-  const [target, setTarget] = React.useState("parked.funstrategy.io");
+  const [cname, setCname] = React.useState("");
+  const [target, setTarget] = React.useState("");
   const [error, setError] = React.useState("");
 
   // Reset state when modal opens
   React.useEffect(() => {
     if (isOpen) {
       setARecord("");
-      setCname("www");
-      setTarget("parked.funstrategy.io");
+      setCname("");
+      setTarget("");
       setError("");
     }
   }, [isOpen]);
@@ -193,7 +193,7 @@ function ConnectModal({
             <label className="text-xs font-semibold text-white/50 uppercase tracking-wider">CNAME (Host) <span className="text-red-400">*</span></label>
             <input 
               type="text" 
-              placeholder="www" 
+              placeholder="e.g. www" 
               value={cname}
               onChange={(e) => setCname(e.target.value)}
               className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/50 transition-colors placeholder:text-white/20"
@@ -204,7 +204,7 @@ function ConnectModal({
             <label className="text-xs font-semibold text-white/50 uppercase tracking-wider">Target (@) <span className="text-red-400">*</span></label>
              <input 
               type="text" 
-              placeholder="parked.funstrategy.io" 
+              placeholder="e.g. parked.funstrategy.io" 
               value={target}
               onChange={(e) => setTarget(e.target.value)}
               className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/50 transition-colors placeholder:text-white/20"
